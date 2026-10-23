@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u01-types",
+    "title": "Types et variables",
+    "description": "Primitifs, conversions, valeurs par défaut",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 1,
+    "order": 1,
+    "lesson": "# Types et variables\n\nEn TypeScript, les types sont *effacés* à l'exécution et `number` couvre tout. En Java, le typage est **statique et réel** : chaque variable a un type déclaré.\n\n| TypeScript | Java |\n|---|---|\n| `let n: number = 3` | `int n = 3;` ou `double d = 3.0;` |\n| `const s: string = \"a\"` | `final String s = \"a\";` |\n| `boolean` | `boolean` |\n\n## Les 8 types primitifs\n`byte`, `short`, `int` (32 bits, le défaut), `long` (suffixe `L`), `float` (suffixe `f`), `double` (le défaut des décimaux), `char` (`'a'`), `boolean`.\n\n```java\nint age = 30;\ndouble prix = 9.99;       // 9.99 est un double\nfloat f = 9.99f;          // suffixe obligatoire\nlong grand = 10_000_000_000L;\n```\n\n## À retenir\n- Un **élargissement** est implicite (`int` vers `long`, `int` vers `double`). Un **rétrécissement** exige un cast : `int x = (int) 3.9;` donne 3.\n- Les **champs** d'une classe ont une valeur par défaut (`0`, `false`, `null`). Les variables **locales** n'en ont pas : il faut les initialiser.\n- `double` est approché (`0.1 + 0.2 != 0.3`). Pour l'argent : `BigDecimal` ou un `long` en centimes.\n- `1 / 0` (entiers) lève `ArithmeticException` ; `1.0 / 0` donne `Infinity`.",
+    "cards": [
+      {
+        "id": "f2-001",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quel est le type par défaut d'un littéral décimal comme `3.14` ?",
+        "choices": [
+          "float",
+          "double",
+          "BigDecimal",
+          "long"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`double`.",
+        "explanation": "Pour obtenir un `float`, il faut le suffixe : `3.14f`. Pour un `long` : `10L`.",
+        "tags": [
+          "types",
+          "literals"
+        ],
+        "hint": "Quel suffixe faut-il écrire pour obtenir un `float` ?"
+      },
+      {
+        "id": "f2-002",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Lesquels **ne** sont **pas** des types primitifs ?",
+        "choices": [
+          "int",
+          "String",
+          "boolean",
+          "Integer"
+        ],
+        "correct": [
+          1,
+          3
+        ],
+        "answer": "`String` et `Integer`.",
+        "explanation": "Les 8 primitifs : `byte`, `short`, `int`, `long`, `float`, `double`, `char`, `boolean`. `Integer` est la classe *wrapper* de `int`.",
+        "tags": [
+          "types",
+          "primitives"
+        ]
+      },
+      {
+        "id": "f2-003",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quelle est la valeur par défaut d'un **champ** `boolean` non initialisé ?",
+        "choices": [
+          "false",
+          "true",
+          "null",
+          "0"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`false`.",
+        "explanation": "Les champs reçoivent une valeur par défaut (`0`, `false`, `null`). Les variables **locales** n'en ont pas : les utiliser sans les initialiser est une erreur de compilation.",
+        "tags": [
+          "types",
+          "initialization"
+        ]
+      },
+      {
+        "id": "f2-004",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Lesquelles de ces lignes **ne compilent pas** ?",
+        "choices": [
+          "long a = 10;",
+          "int b = 10L;",
+          "float c = 1.5;",
+          "double d = 1;"
+        ],
+        "correct": [
+          1,
+          2
+        ],
+        "answer": "`int b = 10L;` et `float c = 1.5;`.",
+        "explanation": "Ce sont des conversions avec perte (`long` vers `int`, `double` vers `float`) : un cast ou le suffixe `f` est nécessaire. Les élargissements (`int` vers `long`, `int` vers `double`) sont implicites.",
+        "tags": [
+          "types",
+          "casting"
+        ],
+        "hint": "Un `long` rentre-t-il dans un `int`, un `double` dans un `float`, sans cast ?"
+      },
+      {
+        "id": "f2-005",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Quel est le résultat de `7 / 2 * 2.0` ?",
+        "choices": [
+          "7.0",
+          "6.0",
+          "6",
+          "3.5"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`6.0`.",
+        "explanation": "L'évaluation va de gauche à droite : `7 / 2` est une division **entière** (3), puis `3 * 2.0` donne `6.0`.",
+        "tags": [
+          "operators",
+          "pitfall"
+        ],
+        "hint": "Évalue de gauche à droite : `7 / 2` entre deux `int` donne quoi ?"
+      },
+      {
+        "id": "f2-012",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Que donne `1.0 / 0` en Java ?",
+        "choices": [
+          "ArithmeticException",
+          "Infinity",
+          "NaN",
+          "0"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`Infinity`.",
+        "explanation": "La division entière par zéro (`1 / 0`) lève `ArithmeticException`, mais pas la division flottante, qui donne `Infinity` (ou `NaN` pour `0.0 / 0`).",
+        "tags": [
+          "operators",
+          "pitfall"
+        ],
+        "hint": "Division entière et division flottante ne réagissent pas pareil face à zéro."
+      },
+      {
+        "id": "f2-013",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Lesquels conviennent pour des calculs monétaires **exacts** ?",
+        "choices": [
+          "double",
+          "float",
+          "BigDecimal",
+          "long (en centimes)"
+        ],
+        "correct": [
+          2,
+          3
+        ],
+        "answer": "`BigDecimal` et `long` (en centimes).",
+        "explanation": "`double` et `float` utilisent une représentation binaire approchée : `0.1 + 0.2 != 0.3`. Avec `BigDecimal`, construire à partir d'une `String` (`new BigDecimal(\"0.1\")`).",
+        "tags": [
+          "types",
+          "BigDecimal",
+          "pitfall"
+        ],
+        "hint": "Un nombre binaire peut-il représenter exactement 0.1 ?"
+      },
+      {
+        "id": "f2-025",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "char c = 'a';\nc += 1;\nSystem.out.println(c);\nSystem.out.println('a' + 1);"
+        },
+        "answer": "`b` puis `98`",
+        "explanation": "`c += 1` inclut un cast implicite vers `char`. `'a' + 1` est une expression `int` (code 97 + 1).",
+        "tags": [
+          "char",
+          "operators"
+        ],
+        "hint": "`'a'` vaut 97 en `int`, et `c += 1` fait un cast implicite vers `char`."
+      },
+      {
+        "id": "f2-028",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "System.out.println(-7 / 2);\nSystem.out.println(-7 % 2);"
+        },
+        "answer": "`-3` puis `-1`",
+        "explanation": "La division entière tronque vers zéro. Le reste (`%`) prend le signe du dividende : `-7 == -3 * 2 + (-1)`. Pour un modulo toujours positif : `Math.floorMod(-7, 2)` donne `1`.",
+        "tags": [
+          "operators",
+          "modulo"
+        ],
+        "hint": "La division entière tronque vers zéro ; le reste prend le signe du dividende."
+      }
+    ]
+  }
+}

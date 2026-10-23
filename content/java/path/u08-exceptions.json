@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u08-exceptions",
+    "title": "Exceptions",
+    "description": "checked/unchecked, try-with-resources, finally",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 2,
+    "order": 8,
+    "lesson": "# Exceptions\n\n- **Checked** (sous-classes de `Exception`, sauf `RuntimeException`) : à déclarer (`throws`) ou capturer. **Unchecked** (`RuntimeException`, `Error`) : sans obligation.\n- Conserve toujours la cause : `throw new MonException(\"message\", cause);`\n\n```java\ntry (var in = Files.newBufferedReader(path)) {   // fermé automatiquement\n    return in.readLine();\n} catch (IOException e) {\n    throw new UncheckedIOException(e);\n}\n```\n- `try-with-resources` appelle `close()` même en cas d'erreur (ordre inverse des déclarations).\n- `finally` s'exécute toujours. Un `return` dans un `finally` **écrase** celui du `try` : à éviter.\n- Ne confonds pas `final` (modificateur), `finally` (bloc) et `finalize()` (ancien, déprécié).",
+    "cards": [
+      {
+        "id": "exc-001",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "Exceptions *checked* vs *unchecked* ?",
+        "answer": "*Checked* : sous-classes de `Exception` hors `RuntimeException`, à déclarer ou capturer. *Unchecked* : `RuntimeException` et `Error`, sans obligation.",
+        "tags": [
+          "exceptions"
+        ]
+      },
+      {
+        "id": "kw-001",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "`final`, `finally`, `finalize` : différences ?",
+        "answer": "`final` : modificateur (constante, méthode non redéfinissable, classe non héritable). `finally` : bloc exécuté après `try/catch`. `finalize()` : ancienne méthode de nettoyage, dépréciée.",
+        "tags": [
+          "keywords"
+        ]
+      },
+      {
+        "id": "exc-002",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Que garantit ce `try-with-resources` ?",
+        "code": {
+          "language": "java",
+          "source": "try (var in = Files.newBufferedReader(path)) {\n    return in.readLine();\n}"
+        },
+        "answer": "`close()` est appelé automatiquement, même en cas d'exception, car la ressource implémente `AutoCloseable`.",
+        "explanation": "Avec plusieurs ressources, la fermeture se fait dans l'ordre inverse de leur déclaration.",
+        "tags": [
+          "exceptions",
+          "io"
+        ],
+        "hint": "Quelle interface la ressource doit-elle implémenter ?"
+      },
+      {
+        "id": "exc-004",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Comment bien concevoir et chaîner des exceptions personnalisées ?",
+        "answer": "Étendre `Exception` (*checked*) si l'appelant peut raisonnablement réagir, `RuntimeException` sinon. Toujours conserver la cause : `throw new MyException(\"message\", cause);`.",
+        "explanation": "Éviter de capturer `Exception`/`Throwable` trop largement et de logger puis relancer la même exception (doublons dans les logs).",
+        "tags": [
+          "exceptions",
+          "design"
+        ]
+      },
+      {
+        "id": "exc-003",
+        "type": "code",
+        "difficulty": "hard",
+        "question": "Que retourne cette méthode ?",
+        "code": {
+          "language": "java",
+          "source": "static int f() {\n    try { return 1; }\n    finally { return 2; }\n}"
+        },
+        "answer": "`2`",
+        "explanation": "Le `return` du `finally` **écrase** celui du `try` (et masque toute exception en cours). À proscrire.",
+        "tags": [
+          "exceptions",
+          "finally",
+          "pitfall"
+        ],
+        "hint": "Lequel des deux `return` est exécuté en dernier ?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u10-generiques",
+    "title": "Génériques",
+    "description": "Effacement de type, jokers, PECS",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 3,
+    "order": 10,
+    "lesson": "# Génériques\n\nComme en TS, `List<String>` donne de la sûreté de type à la compilation. Mais en Java, les génériques sont **effacés** à l'exécution (*type erasure*) : `List<String>` et `List<Integer>` sont de même classe `List`. D'où : pas de `new T()`, pas de `instanceof List<String>`.\n\n- Les génériques sont **invariants** : `List<String>` n'est pas un `List<Object>`.\n- Jokers : `List<?>` (type inconnu), `List<? extends Number>` (lecture), `List<? super Integer>` (écriture).\n- **PECS** : *Producer Extends, Consumer Super*, comme dans `Collections.copy(List<? super T> dest, List<? extends T> src)`.",
+    "cards": [
+      {
+        "id": "gen-001",
+        "type": "basic",
+        "difficulty": "hard",
+        "question": "Qu'est-ce que l'effacement de type (*type erasure*) ?",
+        "answer": "Le compilateur supprime les paramètres de type génériques : à l'exécution, `List<String>` et `List<Integer>` sont de même type `List`.",
+        "explanation": "Conséquences : pas de `new T()`, pas de `instanceof List<String>`, pas de tableau générique.",
+        "tags": [
+          "generics"
+        ]
+      },
+      {
+        "id": "gen-002",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "question": "Lesquelles de ces affectations compilent ?",
+        "choices": [
+          "List<Object> l = new ArrayList<String>();",
+          "List<?> l = new ArrayList<String>();",
+          "List<String> l = new ArrayList<Object>();",
+          "List<? extends Number> l = new ArrayList<Integer>();"
+        ],
+        "correct": [
+          1,
+          3
+        ],
+        "answer": "Les choix 2 et 4. Les génériques sont **invariants** : `List<String>` n'est pas un `List<Object>`. Les jokers (`?`, `? extends`) permettent la covariance en lecture.",
+        "tags": [
+          "generics",
+          "wildcards"
+        ],
+        "hint": "Les génériques sont invariants : `List<String>` est-il un sous-type de `List<Object>` ?"
+      },
+      {
+        "id": "gen-003",
+        "type": "basic",
+        "difficulty": "hard",
+        "question": "Que signifie le principe PECS (*Producer Extends, Consumer Super*) ?",
+        "answer": "Une collection qui **produit** des éléments (qu'on lit) se déclare `? extends T` ; une collection qui **consomme** des éléments (qu'on écrit) se déclare `? super T`.",
+        "explanation": "Exemple : `Collections.copy(List<? super T> dest, List<? extends T> src)`. Avec `? extends`, on peut lire en `T` mais on ne peut pas ajouter (hors `null`).",
+        "tags": [
+          "generics",
+          "wildcards"
+        ]
+      }
+    ]
+  }
+}

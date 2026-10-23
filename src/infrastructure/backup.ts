@@ -5,11 +5,11 @@ import { setSetting } from './settings';
 const KIND = 'flashlearn-backup';
 
 export async function createBackup() {
-  const [decks, cards, states, logs, settings] = await Promise.all([
-    db.decks.toArray(), db.cards.toArray(), db.states.toArray(), db.logs.toArray(), db.settings.toArray(),
+  const [decks, cards, states, logs, settings, progress] = await Promise.all([
+    db.decks.toArray(), db.cards.toArray(), db.states.toArray(), db.logs.toArray(), db.settings.toArray(), db.progress.toArray(),
   ]);
   await setSetting('lastBackupAt', Date.now());
-  return { kind: KIND, version: 1, exportedAt: new Date().toISOString(), decks, cards, states, logs, settings };
+  return { kind: KIND, version: 1, exportedAt: new Date().toISOString(), decks, cards, states, logs, settings, progress };
 }
 
 export async function restoreBackup(text: string) {
@@ -19,19 +19,20 @@ export async function restoreBackup(text: string) {
   for (const k of ['decks', 'cards', 'states', 'logs', 'settings'])
     if (!Array.isArray(j[k])) throw new Error(`Sauvegarde corrompue : "${k}" manquant`);
   for (const [i, c] of j.cards.entries()) {
-    const { uid, deckId, rev, ...content } = c;
+    const { uid, deckId, rev, pos: _pos, ...content } = c;
     if (!uid || !deckId || !rev || !CardSchema.safeParse(content).success) throw new Error(`Sauvegarde corrompue : cards[${i}]`);
   }
   for (const s of j.states) {
     s.card.due = new Date(s.card.due);
     if (s.card.last_review) s.card.last_review = new Date(s.card.last_review);
   }
-  await db.transaction('rw', [db.decks, db.cards, db.states, db.logs, db.settings], async () => {
-    await Promise.all([db.decks.clear(), db.cards.clear(), db.states.clear(), db.logs.clear(), db.settings.clear()]);
+  await db.transaction('rw', [db.decks, db.cards, db.states, db.logs, db.settings, db.progress], async () => {
+    await Promise.all([db.decks.clear(), db.cards.clear(), db.states.clear(), db.logs.clear(), db.settings.clear(), db.progress.clear()]);
     await db.decks.bulkAdd(j.decks);
     await db.cards.bulkAdd(j.cards);
     await db.states.bulkAdd(j.states);
     await db.logs.bulkAdd(j.logs);
     await db.settings.bulkAdd(j.settings);
+    await db.progress.bulkAdd(Array.isArray(j.progress) ? j.progress : []);
   });
 }

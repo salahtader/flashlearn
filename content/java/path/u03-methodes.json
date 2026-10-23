@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u03-methodes",
+    "title": "Méthodes, tableaux et premières erreurs",
+    "description": "Passage par valeur, tableaux, null, try/catch",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 1,
+    "order": 3,
+    "lesson": "# Méthodes, tableaux et premières erreurs\n\n## Méthodes\nLe type de retour et les types des paramètres sont obligatoires ; `void` si rien n'est retourné.\n\n```java\nstatic int somme(int a, int b) { return a + b; }\nstatic int total(int... valeurs) { /* valeurs est un int[] */ return 0; }\n```\n**Java passe toujours par valeur.** Pour un objet ou un tableau, la valeur copiée est la *référence* : la méthode peut modifier le contenu partagé, mais pas faire pointer ta variable ailleurs.\n\n## Tableaux\nTaille **fixe**, contrairement aux tableaux JS.\n\n```java\nint[] t = new int[3];       // {0, 0, 0}\nint[] u = {1, 2, 3};\nSystem.out.println(u.length);   // un champ, sans parenthèses\n```\nAccès hors limites : `ArrayIndexOutOfBoundsException`.\n\n## null et exceptions\nUne référence peut valoir `null` ; l'utiliser lève une `NullPointerException`. Il n'y a pas d'`undefined` en Java.\n\n```java\ntry { /* ... */ }\ncatch (ArrayIndexOutOfBoundsException e) { /* ... */ }\nfinally { /* toujours exécuté */ }\n```",
+    "cards": [
+      {
+        "id": "f2-010",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Comment obtient-on la taille d'un tableau `t` ?",
+        "choices": [
+          "t.length",
+          "t.length()",
+          "t.size()",
+          "t.getLength()"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`t.length` (un champ, sans parenthèses).",
+        "explanation": "`String.length()` est une méthode, `List.size()` aussi : trois syntaxes différentes.",
+        "tags": [
+          "arrays",
+          "syntax"
+        ]
+      },
+      {
+        "id": "f2-011",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quelle exception est levée par `s.length()` quand `String s = null;` ?",
+        "choices": [
+          "NullPointerException",
+          "IllegalArgumentException",
+          "ArithmeticException",
+          "ClassCastException"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`NullPointerException`.",
+        "explanation": "Appeler une méthode ou lire un champ sur une référence `null` lève toujours une NPE.",
+        "tags": [
+          "exceptions",
+          "null"
+        ]
+      },
+      {
+        "id": "f2-018",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Quels appels sont valides pour `void f(int... xs)` ?",
+        "choices": [
+          "f()",
+          "f(1)",
+          "f(1, 2, 3)",
+          "f(new int[]{1, 2})"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "answer": "Tous.",
+        "explanation": "Les *varargs* sont reçus comme un tableau `int[]` ; sans argument, le tableau est vide. Le paramètre varargs doit être le dernier.",
+        "tags": [
+          "methods",
+          "varargs"
+        ]
+      },
+      {
+        "id": "f2-027",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "try {\n    int[] t = new int[2];\n    t[2] = 1;\n    System.out.print(\"A\");\n} catch (ArrayIndexOutOfBoundsException e) {\n    System.out.print(\"B\");\n} finally {\n    System.out.print(\"C\");\n}"
+        },
+        "answer": "`BC`",
+        "explanation": "`t[2]` est hors limites (taille 2) : le `catch` affiche `B`, puis le `finally` affiche `C`. Le `A` n'est jamais atteint.",
+        "tags": [
+          "exceptions",
+          "arrays",
+          "finally"
+        ],
+        "hint": "Quelle est la taille du tableau, et quel index est invalide ?"
+      },
+      {
+        "id": "f2-026",
+        "type": "code",
+        "difficulty": "hard",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "static void change(int[] t, int v) { t[0] = 99; v = 99; }\n\nint[] arr = {1};\nint val = 1;\nchange(arr, val);\nSystem.out.println(arr[0] + \" \" + val);"
+        },
+        "answer": "`99 1`",
+        "explanation": "Java passe **toujours par valeur** : pour un objet, la valeur copiée est la référence. `t[0] = 99` modifie le tableau partagé ; `v = 99` ne change que la copie locale.",
+        "tags": [
+          "methods",
+          "pass-by-value"
+        ],
+        "hint": "Java copie toujours la valeur. Pour un tableau, que vaut cette valeur ?"
+      }
+    ]
+  }
+}

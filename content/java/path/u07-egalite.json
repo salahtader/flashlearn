@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u07-egalite",
+    "title": "Égalité, tri et pièges des collections",
+    "description": "equals/hashCode, cache Integer, Comparator, immuabilité",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 2,
+    "order": 7,
+    "lesson": "# Égalité, tri et pièges des collections\n\n- **Contrat** : si `a.equals(b)`, alors `a.hashCode() == b.hashCode()`. Sinon `HashMap` et `HashSet` se comportent mal.\n- Les chaînes littérales sont **internées** (`\"a\" == \"a\"`), pas celles créées par `new String(\"a\")`. Toujours `equals()`.\n- Les `Integer` de -128 à 127 sont mis en cache : `==` marche « par hasard » sur les petits nombres.\n\n## Trier\n```java\npeople.sort(Comparator.comparing(Person::name).thenComparing(Person::age));\n```\n`Comparable<T>` : ordre naturel (dans la classe). `Comparator<T>` : ordre externe.\n\n## Pièges\n- Modifier une liste **pendant** un parcours for-each : `ConcurrentModificationException`. Utiliser `Iterator.remove()` ou `removeIf`.\n- `List.of(...)` et `List.copyOf(...)` sont immuables ; `Collections.unmodifiableList` n'est qu'une **vue**.\n- `HashMap` accepte `null` ; `ConcurrentHashMap` non.",
+    "cards": [
+      {
+        "id": "eq-002",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Quel est le contrat entre `equals()` et `hashCode()` ?",
+        "answer": "Deux objets égaux selon `equals()` doivent avoir le même `hashCode()`. L'inverse n'est pas requis.",
+        "explanation": "Sinon `HashMap` et `HashSet` ne retrouvent pas correctement les éléments.",
+        "tags": [
+          "equals",
+          "hashCode",
+          "collections"
+        ],
+        "hint": "`HashMap` retrouve un élément par `hashCode` d'abord, puis par `equals`."
+      },
+      {
+        "id": "str-001",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "String s1 = \"a\";\nString s2 = \"a\";\nString s3 = new String(\"a\");\nSystem.out.println(s1 == s2);\nSystem.out.println(s1 == s3);"
+        },
+        "answer": "`true` puis `false`.",
+        "explanation": "Les littéraux sont internés (même référence). `new String(\"a\")` crée un nouvel objet. Utiliser `equals()` pour comparer le contenu.",
+        "tags": [
+          "String",
+          "pool"
+        ]
+      },
+      {
+        "id": "wrap-001",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "Integer a = 127, b = 127, c = 128, d = 128;\nSystem.out.println((a == b) + \" \" + (c == d));"
+        },
+        "answer": "`true false`",
+        "explanation": "`Integer.valueOf` (utilisé par l'autoboxing) met en cache les valeurs de -128 à 127 : même référence pour 127, nouveaux objets pour 128. Comparer les wrappers avec `equals()`.",
+        "tags": [
+          "Integer",
+          "cache",
+          "equals"
+        ],
+        "hint": "Il existe un cache pour les petits entiers : jusqu'à quelle valeur ?"
+      },
+      {
+        "id": "col-005",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "`Comparable` vs `Comparator` ?",
+        "answer": "`Comparable<T>` : ordre **naturel** défini dans la classe (`compareTo`). `Comparator<T>` : ordre **externe**, plusieurs possibles (`compare`), composable avec `Comparator.comparing(...).thenComparing(...)`.",
+        "tags": [
+          "collections",
+          "sorting"
+        ]
+      },
+      {
+        "id": "col-004",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "`HashMap`, `Hashtable`, `ConcurrentHashMap` : quand utiliser lequel ?",
+        "answer": "`HashMap` : non thread-safe, accepte une clé `null` et des valeurs `null`. `Hashtable` : ancien, entièrement synchronisé, à éviter. `ConcurrentHashMap` : thread-safe avec verrouillage fin, très scalable, **ni clé ni valeur `null`**.",
+        "tags": [
+          "collections",
+          "concurrency"
+        ]
+      },
+      {
+        "id": "col-006",
+        "type": "code",
+        "difficulty": "hard",
+        "question": "Que se passe-t-il à l'exécution de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "List<Integer> l = new ArrayList<>(List.of(1, 2, 3));\nfor (Integer x : l) {\n    if (x == 1) l.remove(x);\n}"
+        },
+        "answer": "Une `ConcurrentModificationException` est levée.",
+        "explanation": "L'itérateur est *fail-fast* : il compare un compteur de modifications (`modCount`). Corrections : `Iterator.remove()`, `list.removeIf(...)` ou parcourir une copie. Piège : en supprimant l'avant-dernier élément, la boucle s'arrête sans exception.",
+        "tags": [
+          "collections",
+          "iterator",
+          "pitfall"
+        ],
+        "hint": "Que vérifie l'itérateur à chaque appel de `next()` ?"
+      },
+      {
+        "id": "col-007",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "question": "Lesquelles produisent une liste impossible à modifier, **indépendante** de sa source ?",
+        "choices": [
+          "List.of(1, 2)",
+          "Arrays.asList(1, 2)",
+          "Collections.unmodifiableList(list)",
+          "List.copyOf(list)"
+        ],
+        "correct": [
+          0,
+          3
+        ],
+        "answer": "`List.of(...)` et `List.copyOf(...)`.",
+        "explanation": "`Collections.unmodifiableList` n'est qu'une **vue** : elle reflète les changements de la liste source. `Arrays.asList` est de taille fixe mais autorise `set`.",
+        "tags": [
+          "collections",
+          "immutability"
+        ],
+        "hint": "Une *vue* reflète-t-elle les changements de sa source ?"
+      }
+    ]
+  }
+}

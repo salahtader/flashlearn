@@ -5,9 +5,12 @@ import type { Card } from '../domain/schema';
 export interface DeckRow {
   id: string; title: string; description?: string; subject: string; language: string;
   tags: string[]; enabled: boolean; builtin: boolean; importedAt: number;
+  level?: number; order?: number; lesson?: string;
 }
+/** Progression dans le parcours : leçon lue, déblocage manuel. */
+export interface ProgressRow { deckId: string; lessonReadAt?: number; unlocked?: boolean }
 /** Contenu pédagogique. `uid` = `${deckId}::${card.id}`, `rev` = hash du contenu. */
-export type CardRow = Card & { uid: string; deckId: string; rev: string };
+export type CardRow = Card & { uid: string; deckId: string; rev: string; pos?: number };
 /** État FSRS d'une carte (absent = carte nouvelle). `due` dupliqué en timestamp pour l'index. */
 export interface StateRow { cardUid: string; deckId: string; card: FCard; due: number }
 /** Journal append-only des révisions. rating: 1=À revoir 2=Difficile 3=Bien 4=Facile. */
@@ -23,6 +26,7 @@ class FlashDB extends Dexie {
   states!: Table<StateRow, string>;
   logs!: Table<LogRow, number>;
   settings!: Table<SettingRow, string>;
+  progress!: Table<ProgressRow, string>;
   constructor() {
     super('flashlearn');
     this.version(1).stores({
@@ -32,6 +36,7 @@ class FlashDB extends Dexie {
       logs: '++id, cardUid, deckId, at',
       settings: 'key',
     });
+    this.version(2).stores({ progress: 'deckId' });
   }
 }
 export const db = new FlashDB();

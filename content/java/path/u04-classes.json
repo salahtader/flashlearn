@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u04-classes",
+    "title": "Classes et objets",
+    "description": "Champs, constructeurs, visibilité, static, final, equals",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 1,
+    "order": 4,
+    "lesson": "# Classes et objets\n\n```java\npublic class Compte {\n    private double solde;              // champ d'instance\n    static int nbComptes = 0;          // champ de classe, partagé\n\n    public Compte(double initial) {    // constructeur\n        this.solde = initial;\n        nbComptes++;\n    }\n    public double getSolde() { return solde; }\n}\nCompte c = new Compte(100);\n```\nEn TypeScript : `class Compte { private solde: number; constructor(initial: number) { ... } }`. La structure est très proche.\n\n## Visibilité\n`private` (la classe), *sans modificateur* (le package), `protected` (package + sous-classes), `public` (partout). Par défaut, tout `private`, puis on ouvre au besoin.\n\n## static et final\n- `static` : appartient à la classe, pas à une instance (méthode, champ, bloc).\n- `final` : la **référence** ne change plus (pas le contenu de l'objet).\n\n## Object, == et equals\nToute classe hérite de `Object` : `toString()`, `equals()`, `hashCode()`. Pour des objets, `==` compare les **références** ; `equals()` compare l'égalité logique (si la classe la redéfinit).",
+    "cards": [
+      {
+        "id": "f2-029",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "Variable d'instance, variable de classe (`static`) et variable locale : quelles différences ?",
+        "answer": "**Instance** : un exemplaire par objet, valeur par défaut, vit tant que l'objet vit. **Classe (`static`)** : un seul exemplaire partagé par toutes les instances, chargé avec la classe. **Locale** : déclarée dans une méthode ou un bloc, vit sur la *stack*, **sans valeur par défaut** (doit être initialisée).",
+        "tags": [
+          "oop",
+          "scope",
+          "static"
+        ]
+      },
+      {
+        "id": "f2-009",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Lesquelles de ces méthodes sont définies dans `java.lang.Object` ?",
+        "choices": [
+          "toString()",
+          "equals(Object)",
+          "compareTo(Object)",
+          "hashCode()"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "answer": "`toString()`, `equals()` et `hashCode()`.",
+        "explanation": "`compareTo` appartient à l'interface `Comparable`. `Object` définit aussi `getClass()`, `wait()`, `notify()`…",
+        "tags": [
+          "object",
+          "methods"
+        ]
+      },
+      {
+        "id": "eq-001",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "Quelle différence entre `==` et `equals()` ?",
+        "answer": "`==` compare les **références** (ou les valeurs pour les primitifs). `equals()` compare l'égalité logique, si la classe la redéfinit.",
+        "explanation": "`Object.equals()` par défaut se comporte comme `==`.",
+        "tags": [
+          "equals",
+          "object"
+        ]
+      },
+      {
+        "id": "oop-004",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Quand le compilateur génère-t-il un constructeur par défaut, et que fait `super()` ?",
+        "answer": "Uniquement si la classe ne déclare **aucun** constructeur. Tout constructeur commence par un appel implicite à `super()` (sans argument) si aucun `this(...)`/`super(...)` explicite n'est écrit.",
+        "explanation": "Si le parent n'a pas de constructeur sans argument, la sous-classe doit appeler explicitement `super(...)`, sinon erreur de compilation.",
+        "tags": [
+          "oop",
+          "constructors"
+        ]
+      },
+      {
+        "id": "f2-006",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Quel modificateur d'accès rend un membre visible dans son package **et** dans les sous-classes d'autres packages, mais pas partout ?",
+        "choices": [
+          "private",
+          "(sans modificateur)",
+          "protected",
+          "public"
+        ],
+        "correct": [
+          2
+        ],
+        "answer": "`protected`.",
+        "explanation": "`private` : la classe seule. Sans modificateur : le package. `public` : partout.",
+        "tags": [
+          "oop",
+          "access-modifiers"
+        ]
+      },
+      {
+        "id": "f2-007",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Lesquels peuvent être déclarés `static` ?",
+        "choices": [
+          "Une méthode",
+          "Un champ",
+          "Un bloc d'initialisation",
+          "Un constructeur"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "answer": "Une méthode, un champ et un bloc d'initialisation.",
+        "explanation": "Un constructeur ne peut pas être `static` : il initialise une instance.",
+        "tags": [
+          "oop",
+          "static"
+        ]
+      },
+      {
+        "id": "f2-008",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Que se passe-t-il avec ce code ?",
+        "code": {
+          "language": "java",
+          "source": "final List<String> l = new ArrayList<>();\nl.add(\"x\");"
+        },
+        "choices": [
+          "Il compile et s'exécute",
+          "Erreur de compilation : final interdit toute modification",
+          "UnsupportedOperationException à l'exécution"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "Il compile et s'exécute : `final` rend la **référence** constante, pas le contenu de l'objet.",
+        "explanation": "Pour une liste réellement immuable, utiliser `List.of(...)`.",
+        "tags": [
+          "final",
+          "references"
+        ],
+        "hint": "`final` s'applique à la variable, pas à l'objet pointé."
+      }
+    ]
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u09-java-moderne",
+    "title": "Java moderne",
+    "description": "Lambdas, streams, Optional, records, sealed, switch",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 2,
+    "order": 9,
+    "lesson": "# Java moderne\n\n```java\n// Interface fonctionnelle : une seule méthode abstraite\nPredicate<String> vide = s -> s.isEmpty();\n\nList<String> noms = people.stream()\n    .filter(p -> p.age() >= 18)\n    .map(Person::name)\n    .toList();                       // comme filter/map en JS\n```\n- Opérations **intermédiaires** (`filter`, `map`) : paresseuses. Opération **terminale** (`collect`, `forEach`, `toList`) : déclenche le calcul. Un stream ne se consomme qu'une fois.\n- `Optional<T>` : type de retour pour une absence possible (pas en champ ni en paramètre). `orElseGet` est paresseux, `orElse` non.\n- `record Point(int x, int y) {}` génère constructeur, accesseurs, `equals`, `hashCode`, `toString` (Java 16).\n- `sealed ... permits` restreint les sous-types (Java 17) ; le compilateur peut vérifier qu'un `switch` est exhaustif.\n- `switch` en expression : `yield` renvoie la valeur d'un bloc.",
+    "cards": [
+      {
+        "id": "lam-001",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "Qu'est-ce qu'une interface fonctionnelle ?",
+        "answer": "Une interface avec **une seule méthode abstraite**, utilisable comme cible d'une lambda ou d'une référence de méthode. Annotation optionnelle `@FunctionalInterface` pour la faire vérifier.",
+        "explanation": "Exemples : `Function<T,R>`, `Predicate<T>`, `Supplier<T>`, `Consumer<T>`, `Runnable`, `Comparator<T>`.",
+        "tags": [
+          "lambda",
+          "functional"
+        ]
+      },
+      {
+        "id": "lam-002",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quelle interface fonctionnelle prend un argument et retourne un `boolean` ?",
+        "choices": [
+          "Predicate<T>",
+          "Supplier<T>",
+          "Consumer<T>",
+          "UnaryOperator<T>"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`Predicate<T>` (méthode `test`).",
+        "explanation": "`Function<T,R>` transforme, `Supplier<T>` fournit sans argument, `Consumer<T>` consomme sans résultat.",
+        "tags": [
+          "lambda",
+          "functional"
+        ]
+      },
+      {
+        "id": "str-002",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Opérations intermédiaires vs terminales d'un `Stream` ?",
+        "answer": "Les intermédiaires (`map`, `filter`…) sont **paresseuses** et retournent un `Stream`. Les terminales (`collect`, `forEach`, `reduce`…) déclenchent le traitement ; un stream ne se consomme qu'une fois.",
+        "tags": [
+          "streams"
+        ]
+      },
+      {
+        "id": "opt-001",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Quelles sont les bonnes pratiques avec `Optional` ?",
+        "answer": "L'utiliser comme **type de retour** pour une absence possible. Éviter en champ, en paramètre ou en collection. Préférer `map`, `orElse`, `orElseGet`, `orElseThrow` à `get()`.",
+        "explanation": "`orElse(x)` évalue toujours `x` ; `orElseGet(supplier)` ne l'évalue que si l'`Optional` est vide.",
+        "tags": [
+          "Optional",
+          "best-practices"
+        ]
+      },
+      {
+        "id": "rec-001",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Que génère le compilateur pour ce `record` ?",
+        "code": {
+          "language": "java",
+          "source": "record Point(int x, int y) {}"
+        },
+        "answer": "Champs `private final`, constructeur canonique, accesseurs `x()` et `y()`, ainsi que `equals`, `hashCode` et `toString`. Le record est implicitement `final`.",
+        "explanation": "Disponible depuis Java 16. Immuabilité *superficielle* : un champ de type objet mutable reste modifiable. Un constructeur compact permet de valider les arguments.",
+        "tags": [
+          "records",
+          "java16"
+        ]
+      },
+      {
+        "id": "sw-001",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Que fait `yield` dans cette *switch expression* ?",
+        "code": {
+          "language": "java",
+          "source": "int n = switch (day) {\n    case SATURDAY, SUNDAY -> 0;\n    case FRIDAY -> { int h = 6; yield h; }\n    default -> 8;\n};"
+        },
+        "answer": "`yield` renvoie la valeur d'un **bloc** de la *switch expression* (Java 14+). Pas de *fall-through*, et l'expression doit être exhaustive.",
+        "explanation": "Les flèches `->` évitent les `break` oubliés. `case SATURDAY, SUNDAY` regroupe plusieurs valeurs.",
+        "tags": [
+          "switch",
+          "java14"
+        ]
+      },
+      {
+        "id": "sealed-001",
+        "type": "basic",
+        "difficulty": "hard",
+        "question": "À quoi servent les classes `sealed` (Java 17) ?",
+        "answer": "À **restreindre** les sous-types autorisés avec `permits`. Chaque sous-type doit être `final`, `sealed` ou `non-sealed`.",
+        "explanation": "Le compilateur connaît tous les cas : un `switch` avec *pattern matching* peut être vérifié comme exhaustif, sans `default`.",
+        "tags": [
+          "sealed",
+          "java17",
+          "pattern-matching"
+        ]
+      }
+    ]
+  }
+}

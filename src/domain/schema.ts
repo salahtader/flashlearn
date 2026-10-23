@@ -10,6 +10,7 @@ const common = {
   question: text,
   answer: text,
   explanation: z.string().max(8000).optional(),
+  hint: z.string().max(2000).optional(),
   code: code.optional(),
   tags: z.array(z.string().max(60)).max(30).default([]),
   references: z.array(z.string().max(500)).max(20).default([]),
@@ -32,6 +33,10 @@ export const DeckFileSchema = z.object({
     id,
     title: text,
     description: z.string().max(1000).optional(),
+    // Parcours (optionnel) : level 1-3, order = position dans la matière, lesson = leçon Markdown lue avant les cartes.
+    level: z.number().int().min(1).max(3).optional(),
+    order: z.number().int().min(1).optional(),
+    lesson: z.string().max(20000).optional(),
     subject: z.string().trim().min(1).max(60),
     language: z.string().max(10).default('fr'),
     tags: z.array(z.string().max(60)).max(30).default([]),

@@ -10,6 +10,11 @@ npm test         # Vitest : validateur d'import, scheduler, jour d'étude
 npm run build    # dist/
 ```
 
+## Parcours (leçons avant les cartes)
+Un deck avec `order` fait partie du parcours de sa matière ; `level` (1-3) le range dans un niveau ; `lesson` (Markdown) est lue avant les cartes.
+Une unité est **validée** quand la leçon est lue et que toutes ses cartes ont été vues une fois : la suivante s'ouvre (déblocage manuel possible).
+Une carte peut avoir un `hint` (bouton « Indice »). Le parcours Java est dans `content/java/path/` (13 unités, 75 cartes).
+
 ## Ajouter du contenu (sans toucher au code)
 - **Decks fournis** : déposer un `.json` dans `content/<matière>/` (intégré au démarrage, mis à jour si le contenu change).
 - **Import utilisateur** : Bibliothèque → Importer un deck JSON (aperçu, validation avec chemin d'erreur, mode doublons).

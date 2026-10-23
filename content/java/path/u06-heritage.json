@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u06-heritage",
+    "title": "Héritage, interfaces et polymorphisme",
+    "description": "abstract, interface, override, enum, instanceof",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 2,
+    "order": 6,
+    "lesson": "# Héritage, interfaces et polymorphisme\n\n```java\ninterface Forme { double aire(); }\n\nabstract class Base implements Forme {\n    String nom() { return \"forme\"; }\n}\nclass Cercle extends Base {\n    double r;\n    Cercle(double r) { this.r = r; }\n    @Override public double aire() { return Math.PI * r * r; }\n}\nForme f = new Cercle(2);      // polymorphisme\n```\n- Une classe n'**étend** qu'**une** classe, mais **implémente** plusieurs interfaces.\n- **Interface** : un rôle, sans état d'instance. **Classe abstraite** : base avec état et code partagé.\n- **Surcharge** : même nom, paramètres différents (choisie à la compilation). **Redéfinition** : même signature dans la sous-classe (choisie à l'exécution).\n- Les méthodes `static` ne sont pas redéfinies, elles sont *masquées*.\n\n## enum\n```java\nenum Niveau { DEBUTANT, AVANCE }\n```\nUn `enum` peut avoir champs, méthodes et implémenter des interfaces, mais pas étendre une classe.\n\n## instanceof\n```java\nif (o instanceof String s) { System.out.println(s.length()); }   // Java 16+\n```",
+    "cards": [
+      {
+        "id": "oop-002",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "Surcharge (*overload*) vs redéfinition (*override*) ?",
+        "answer": "**Surcharge** : même nom, paramètres différents, résolue à la **compilation**. **Redéfinition** : même signature dans une sous-classe, résolue à l'**exécution** (polymorphisme dynamique).",
+        "explanation": "`@Override` fait vérifier par le compilateur qu'on redéfinit bien une méthode du parent.",
+        "tags": [
+          "oop",
+          "polymorphism"
+        ],
+        "hint": "Qui choisit la méthode : le compilateur ou la JVM ?"
+      },
+      {
+        "id": "f2-016",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Dans une interface, le champ `int MAX = 10;` est implicitement :",
+        "choices": [
+          "public static final",
+          "private",
+          "modifiable",
+          "un champ d'instance"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`public static final`.",
+        "explanation": "Les champs d'interface sont des constantes. Les méthodes abstraites sont implicitement `public abstract`.",
+        "tags": [
+          "interface",
+          "constants"
+        ]
+      },
+      {
+        "id": "oop-001",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Classe abstraite ou interface : quelles différences ?",
+        "answer": "**Interface** : contrat sans état d'instance (constantes uniquement), implémentation multiple, méthodes `default`, `static` et `private` possibles. **Classe abstraite** : peut avoir des champs, des constructeurs et du code partagé, mais une seule peut être héritée.",
+        "explanation": "Règle pratique : interface pour définir un rôle/capacité, classe abstraite pour factoriser un état et un comportement communs.",
+        "tags": [
+          "oop",
+          "interface",
+          "abstract"
+        ]
+      },
+      {
+        "id": "oop-005",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Quels sont les 4 types de classes imbriquées ?",
+        "answer": "1. **Static nested** : indépendante de l'instance externe. 2. **Inner** (non statique) : liée à une instance de la classe externe. 3. **Locale** : déclarée dans une méthode. 4. **Anonyme** : sans nom, déclarée et instanciée en une expression.",
+        "explanation": "Une classe inner garde une référence implicite vers l'instance externe : source possible de fuite mémoire.",
+        "tags": [
+          "oop",
+          "nested-classes"
+        ]
+      },
+      {
+        "id": "f2-017",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Lesquelles de ces affirmations sur les `enum` sont vraies ?",
+        "choices": [
+          "Peut avoir des champs et des méthodes",
+          "Peut étendre une autre classe",
+          "A un constructeur implicitement private",
+          "Peut implémenter des interfaces"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "answer": "Un `enum` peut avoir des champs et méthodes, un constructeur implicitement `private`, et implémenter des interfaces.",
+        "explanation": "Il ne peut pas étendre une classe : il étend déjà implicitement `java.lang.Enum`.",
+        "tags": [
+          "enum",
+          "oop"
+        ]
+      },
+      {
+        "id": "f2-030",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "À quoi sert l'opérateur `instanceof` et quelle est sa forme moderne ?",
+        "answer": "Il teste si un objet est une instance d'un type. Depuis Java 16, le *pattern matching* évite le cast : `if (o instanceof String s) { s.length(); }`.",
+        "explanation": "`null instanceof X` vaut toujours `false`.",
+        "tags": [
+          "oop",
+          "instanceof",
+          "java16"
+        ]
+      },
+      {
+        "id": "oop-003",
+        "type": "code",
+        "difficulty": "hard",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "class A { static String id() { return \"A\"; } String who() { return \"A\"; } }\nclass B extends A { static String id() { return \"B\"; } String who() { return \"B\"; } }\n\nA a = new B();\nSystem.out.println(a.id() + a.who());"
+        },
+        "answer": "`AB`",
+        "explanation": "`a.id()` est statique : elle est résolue sur le type **déclaré** (`A`) et la méthode statique est *masquée*, pas redéfinie. `a.who()` est dynamique : le type réel `B` est utilisé.",
+        "tags": [
+          "oop",
+          "static",
+          "polymorphism"
+        ],
+        "hint": "Une méthode `static` dépend du type **déclaré** de la variable."
+      }
+    ]
+  }
+}

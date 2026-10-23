@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u05-collections",
+    "title": "Collections de base",
+    "description": "List, Set, Map et leurs implémentations",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 1,
+    "order": 5,
+    "lesson": "# Collections de base\n\n| TypeScript | Java |\n|---|---|\n| `string[]` | `List<String>` (`ArrayList`) |\n| `Set<string>` | `Set<String>` (`HashSet`) |\n| `Map<string, number>` | `Map<String, Integer>` (`HashMap`) |\n\n```java\nList<String> noms = new ArrayList<>();\nnoms.add(\"Ada\");\nSet<Integer> ids = new HashSet<>();\nMap<String, Integer> ages = new HashMap<>();\nages.put(\"Ada\", 36);\n```\n- `List` : ordonnée, doublons permis. `Set` : sans doublons. `Map` : clé vers valeur ; **`Map` n'étend pas `Collection`**.\n- Ordre : `HashSet` n'en garantit aucun, `LinkedHashSet` garde l'ordre d'insertion, `TreeSet` trie.\n- Les génériques n'acceptent que des objets : `List<Integer>`, pas `List<int>`. L'*autoboxing* convertit `int` et `Integer`, mais un `Integer` `null` donne une `NullPointerException` à l'*unboxing*.\n- `ArrayList` est le bon choix par défaut.",
+    "cards": [
+      {
+        "id": "col-001",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quelles collections n'autorisent **pas** les doublons ?",
+        "choices": [
+          "ArrayList",
+          "HashSet",
+          "TreeSet",
+          "LinkedList"
+        ],
+        "correct": [
+          1,
+          2
+        ],
+        "answer": "`HashSet` et `TreeSet` (implémentations de `Set`).",
+        "tags": [
+          "collections",
+          "Set"
+        ]
+      },
+      {
+        "id": "f2-020",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Laquelle de ces interfaces **n'étend pas** `Collection` ?",
+        "choices": [
+          "List",
+          "Set",
+          "Map",
+          "Queue"
+        ],
+        "correct": [
+          2
+        ],
+        "answer": "`Map`.",
+        "explanation": "`List`, `Set` et `Queue` étendent `Collection`. `Map` associe clés et valeurs et a sa propre hiérarchie.",
+        "tags": [
+          "collections",
+          "hierarchy"
+        ],
+        "hint": "Une `Map` stocke des paires clé/valeur, pas des éléments seuls."
+      },
+      {
+        "id": "f2-021",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "question": "Quelle implémentation de `Set` conserve l'**ordre d'insertion** ?",
+        "choices": [
+          "HashSet",
+          "TreeSet",
+          "LinkedHashSet",
+          "Aucune"
+        ],
+        "correct": [
+          2
+        ],
+        "answer": "`LinkedHashSet`.",
+        "explanation": "`HashSet` : aucun ordre garanti. `TreeSet` : ordre trié (naturel ou `Comparator`).",
+        "tags": [
+          "collections",
+          "Set"
+        ]
+      },
+      {
+        "id": "col-002",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "`ArrayList` ou `LinkedList` : quand choisir l'un ou l'autre ?",
+        "answer": "`ArrayList` dans la grande majorité des cas (accès par index O(1), bonne localité mémoire). `LinkedList` seulement pour de nombreuses insertions/suppressions en tête via un itérateur ou comme `Deque`.",
+        "tags": [
+          "collections",
+          "performance"
+        ]
+      },
+      {
+        "id": "f2-019",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "question": "Que se passe-t-il avec ce code ?",
+        "code": {
+          "language": "java",
+          "source": "Integer x = null;\nint y = x;"
+        },
+        "choices": [
+          "y vaut 0",
+          "NullPointerException",
+          "Erreur de compilation",
+          "y vaut null"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`NullPointerException` : l'*unboxing* d'un `Integer` `null` en `int` échoue.",
+        "explanation": "Piège classique avec les wrappers, par exemple en lisant une valeur `null` dans une `Map<String, Integer>`.",
+        "tags": [
+          "autoboxing",
+          "pitfall"
+        ],
+        "hint": "Que contient `x`, et que doit faire Java pour le convertir en `int` ?"
+      }
+    ]
+  }
+}

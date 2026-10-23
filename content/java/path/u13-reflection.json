@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u13-reflection",
+    "title": "Réflexion et sérialisation",
+    "description": "Class<T>, getMethods, defaultReadObject",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 3,
+    "order": 13,
+    "lesson": "# Réflexion et sérialisation\n\n- `Class<T>` représente un type à l'exécution : `String.class`, `obj.getClass()`.\n- `getMethods()` : méthodes **publiques** (héritées incluses). `getDeclaredMethods()` : toutes celles **déclarées** par la classe, héritées exclues.\n- Sérialisation Java native : `Serializable`, et `transient` pour exclure un champ.\n- Dans `private void readObject(ObjectInputStream in)`, `in.defaultReadObject()` restaure les champs non statiques et non `transient`.",
+    "cards": [
+      {
+        "id": "refl-001",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "À quoi sert `Class<T>` ?",
+        "answer": "À représenter le type d'une classe à l'exécution et à l'introspecter (champs, méthodes, constructeurs, annotations).",
+        "explanation": "`Class<String> type = String.class;`",
+        "tags": [
+          "Class",
+          "introspection"
+        ]
+      },
+      {
+        "id": "refl-002",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "`getMethods()` vs `getDeclaredMethods()` ?",
+        "answer": "`getMethods()` : méthodes **publiques**, héritées incluses. `getDeclaredMethods()` : toutes les méthodes **déclarées** par la classe (toute visibilité), héritées exclues.",
+        "tags": [
+          "Class",
+          "Method"
+        ]
+      },
+      {
+        "id": "ser-001",
+        "type": "basic",
+        "difficulty": "hard",
+        "question": "Quel est le rôle de `defaultReadObject()` ?",
+        "answer": "Dans un `private void readObject(ObjectInputStream in)` personnalisé, il restaure les champs non `static` et non `transient` de la classe, avant d'appliquer une logique spécifique.",
+        "explanation": "Son pendant à l'écriture est `defaultWriteObject()`.",
+        "tags": [
+          "serialization",
+          "java.io"
+        ]
+      }
+    ]
+  }
+}

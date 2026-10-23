@@ -47,3 +47,13 @@ kbd { opacity: .7; font-size: .75rem; border: 1px solid currentColor; border-rad
 .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
 .g { font: inherit; color: #fff; border: 0; border-radius: 12px; padding: 12px 4px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .g small { opacity: .85; font-size: .7rem; } .g1 { background: var(--bad); } .g2 { background: var(--warn); } .g3 { background: var(--primary); } .g4 { background: var(--good); }
+.hint { margin-top: 12px; padding: 10px 12px; border-left: 4px solid var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); border-radius: 8px; font-size: .95rem; }
+.badge { font-size: .75rem; white-space: nowrap; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+.unit.locked { opacity: .6; } .unit.done .badge { color: var(--good); border-color: var(--good); } .unit.lesson .badge { color: var(--warn); border-color: var(--warn); }
+.level { font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 20px 0 4px; }
+.lesson { min-height: 0; line-height: 1.6; } .lesson h1, .lesson h2 { font-size: 1.15rem; margin: 1.2em 0 .4em; }
+.md table { border-collapse: collapse; margin: .8em 0; font-size: .9rem; display: block; overflow-x: auto; }
+.md th, .md td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+.md ul, .md ol { padding-left: 1.3em; } .md li { margin: .25em 0; }
+.path-now .btn { margin-bottom: 0; }
+.tabs a { font-size: .9rem; }

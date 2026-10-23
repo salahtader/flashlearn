@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { State, type Grade } from 'ts-fsrs';
 import Md, { fenced } from '../../components/Markdown';
 import { applyGrade, GRADES, previewAll } from '../../domain/scheduler';
 import { db, type StateRow } from '../../infrastructure/db';
 import { formatDuration, formatInterval } from '../../utils/time';
 import { buildQueue, type Mode, type QueueItem } from './queue';
+import { loadUnits } from '../path/units';
 
 interface Last { item: QueueItem; prev: StateRow | null; logId: number; rating: Grade }
+const DIFF = { easy: 'Facile', medium: 'Moyen', hard: 'Difficile' } as const;
 
 export default function Review() {
   const { deckId } = useParams();
@@ -21,11 +23,26 @@ export default function Review() {
   const [last, setLast] = useState<Last | null>(null);
   const [counts, setCounts] = useState<Record<number, number>>({ 1: 0, 2: 0, 3: 0, 4: 0 });
   const [reviewed, setReviewed] = useState(0);
+  const [gate, setGate] = useState<string | null>(null);
+  const [lessonIds, setLessonIds] = useState<Set<string>>(new Set());
+  const [hintShown, setHintShown] = useState(false);
   const startedAt = useRef(Date.now());
   const shownAt = useRef(Date.now());
 
+  useEffect(() => { db.decks.toArray().then((ds) => setLessonIds(new Set(ds.filter((d) => d.lesson).map((d) => d.id)))); }, []);
+
   useEffect(() => {
-    buildQueue(mode, deckId).then((q) => { setQueue(q); setTotal(q.length); shownAt.current = Date.now(); });
+    let alive = true;
+    (async () => {
+      if (deckId) {
+        // Unité verrouillée ou leçon non lue : on passe d'abord par la leçon.
+        const u = (await loadUnits()).find((x) => x.deck.id === deckId);
+        if (u && (u.status === 'locked' || u.status === 'lesson')) { if (alive) setGate(deckId); return; }
+      }
+      const q = await buildQueue(mode, deckId);
+      if (alive) { setQueue(q); setTotal(q.length); shownAt.current = Date.now(); }
+    })();
+    return () => { alive = false; };
   }, [mode, deckId]);
 
   const item = queue?.[0];
@@ -50,7 +67,7 @@ export default function Review() {
     // Carte en (ré)apprentissage due dans < 20 min : on la remet en fin de file.
     const again = next.due.getTime() - now.getTime() < 20 * 60000;
     setQueue((q) => { const [, ...rest] = q ?? []; return again ? [...rest, { card: cur.card, state: row }] : rest; });
-    setRevealed(false); setPicked([]); shownAt.current = Date.now();
+    setRevealed(false); setPicked([]); setHintShown(false); shownAt.current = Date.now();
   }, [queue, mode]);
 
   const undo = useCallback(async () => {
@@ -62,7 +79,7 @@ export default function Review() {
     setQueue((q) => [last.item, ...(q ?? []).filter((x) => x.card.uid !== last.item.card.uid)]);
     setCounts((c) => ({ ...c, [last.rating]: c[last.rating] - 1 }));
     setReviewed((n) => n - 1);
-    setLast(null); setRevealed(false); setPicked([]); shownAt.current = Date.now();
+    setLast(null); setRevealed(false); setPicked([]); setHintShown(false); shownAt.current = Date.now();
   }, [last]);
 
   useEffect(() => {
@@ -76,6 +93,7 @@ export default function Review() {
     return () => window.removeEventListener('keydown', onKey);
   }, [item, revealed, rate, undo]);
 
+  if (gate) return <Navigate to={`/lesson/${gate}`} replace />;
   if (!queue) return <p className="muted">Chargement…</p>;
 
   if (!item) {
@@ -109,8 +127,11 @@ export default function Review() {
   return (
     <>
       <div className="row between">
-        <Link to="/" className="muted">← Quitter</Link>
-        <span className="muted">{queue.length} restantes · {c.difficulty}{item.state === null ? ' · nouvelle' : ''}</span>
+        <span>
+          <Link to="/" className="muted">← Quitter</Link>
+          {lessonIds.has(c.deckId) && <> · <Link to={`/lesson/${c.deckId}`} className="muted">📖 Leçon</Link></>}
+        </span>
+        <span className="muted">{queue.length} restantes · {DIFF[c.difficulty]}{item.state === null ? ' · nouvelle' : ''}</span>
       </div>
       <div className="bar"><div style={{ width: `${progress * 100}%` }} /></div>
 
@@ -137,6 +158,10 @@ export default function Review() {
           </div>
         )}
       </article>
+
+      {!revealed && c.hint && (hintShown
+        ? <div className="hint"><Md>{c.hint}</Md></div>
+        : <button className="link" onClick={() => setHintShown(true)}>💡 Indice</button>)}
 
       {!revealed ? (
         <button className="btn primary big" onClick={() => setRevealed(true)}>Afficher la réponse <kbd>Espace</kbd></button>

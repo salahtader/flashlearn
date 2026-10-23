@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u02-controle",
+    "title": "Chaînes, opérateurs et flux de contrôle",
+    "description": "String, ++, switch, boucles",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 1,
+    "order": 2,
+    "lesson": "# Chaînes, opérateurs et flux de contrôle\n\n## String\nComme en JS, les chaînes sont **immuables** : `s.toUpperCase()` renvoie une *nouvelle* chaîne.\n\n```java\nString s = \"abc\";\ns = s.toUpperCase();              // il faut réaffecter\nboolean memes = s.equals(\"ABC\");  // jamais == pour comparer du texte\n```\nPour construire du texte dans une boucle, utilise `StringBuilder` (en JS : un tableau + `join`).\n\n## Opérateurs\n- `+` s'évalue de gauche à droite : `1 + 2 + \"a\"` donne `\"3a\"`, mais `\"a\" + 1 + 2` donne `\"a12\"`.\n- `i++` renvoie la valeur **puis** incrémente ; `++i` incrémente **puis** renvoie.\n- `/` entre deux entiers est une division entière : `7 / 2` vaut `3`.\n\n## Boucles\n```java\nfor (int i = 0; i < 3; i++) { }\nfor (String nom : noms) { }     // comme for...of\nwhile (condition) { }\n```\n`break` quitte la boucle, `continue` passe à l'itération suivante.\n\n## switch\n```java\nswitch (n) {\n    case 1: faire(); break;     // sans break : fall-through !\n    default: autre();\n}\n// Forme moderne (Java 14+), sans fall-through :\nString s = switch (n) { case 1 -> \"un\"; case 2 -> \"deux\"; default -> \"autre\"; };\n```",
+    "cards": [
+      {
+        "id": "f2-015",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Après `String s = \"abc\"; s.toUpperCase();`, quelle est la valeur de `s` ?",
+        "choices": [
+          "\"ABC\"",
+          "\"abc\"",
+          "null",
+          "Erreur de compilation"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`\"abc\"`.",
+        "explanation": "Les `String` sont immuables : `toUpperCase()` retourne une **nouvelle** chaîne qu'il faut réaffecter (`s = s.toUpperCase();`).",
+        "tags": [
+          "String",
+          "immutability"
+        ]
+      },
+      {
+        "id": "str-003",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "`String`, `StringBuilder`, `StringBuffer` : différences ?",
+        "answer": "`String` : **immuable**. `StringBuilder` : mutable, **non** thread-safe, rapide. `StringBuffer` : mutable, méthodes synchronisées (thread-safe, plus lent).",
+        "explanation": "Pour concaténer dans une boucle, utiliser `StringBuilder` : chaque `+` sur `String` crée un nouvel objet.",
+        "tags": [
+          "String",
+          "performance"
+        ]
+      },
+      {
+        "id": "f2-014",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Que fait `continue` dans une boucle ?",
+        "choices": [
+          "Quitte la boucle",
+          "Passe à l'itération suivante",
+          "Quitte la méthode",
+          "Redémarre la boucle depuis le début"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "Il passe directement à l'**itération suivante**.",
+        "explanation": "`break` quitte la boucle ; `return` quitte la méthode.",
+        "tags": [
+          "control-flow",
+          "loops"
+        ]
+      },
+      {
+        "id": "f2-022",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "int n = 2;\nswitch (n) {\n    case 1: System.out.print(\"A\");\n    case 2: System.out.print(\"B\");\n    case 3: System.out.print(\"C\"); break;\n    default: System.out.print(\"D\");\n}"
+        },
+        "answer": "`BC`",
+        "explanation": "Sans `break`, l'exécution continue dans le `case` suivant (*fall-through*) jusqu'au prochain `break`. Les *switch expressions* avec `->` évitent ce piège.",
+        "tags": [
+          "switch",
+          "pitfall"
+        ],
+        "hint": "Que fait l'exécution quand elle ne rencontre pas de `break` ?"
+      },
+      {
+        "id": "f2-023",
+        "type": "code",
+        "difficulty": "medium",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "System.out.println(\"a\" + 1 + 2);\nSystem.out.println(1 + 2 + \"a\");"
+        },
+        "answer": "`a12` puis `3a`",
+        "explanation": "L'opérateur `+` s'évalue de gauche à droite : dès qu'un opérande est une `String`, la suite est concaténée. `1 + 2` est d'abord une addition.",
+        "tags": [
+          "String",
+          "operators",
+          "pitfall"
+        ],
+        "hint": "Dès qu'un opérande de `+` est une `String`, tout ce qui suit est concaténé."
+      },
+      {
+        "id": "f2-024",
+        "type": "code",
+        "difficulty": "hard",
+        "question": "Quelle est la sortie de ce code ?",
+        "code": {
+          "language": "java",
+          "source": "int i = 5;\nint j = i++ + ++i;\nSystem.out.println(i + \" \" + j);"
+        },
+        "answer": "`7 12`",
+        "explanation": "`i++` donne 5 puis `i` vaut 6 ; `++i` incrémente d'abord (7) puis donne 7. Donc `j = 5 + 7 = 12`.",
+        "tags": [
+          "operators",
+          "increment"
+        ],
+        "hint": "`i++` renvoie l'ancienne valeur, `++i` la nouvelle."
+      }
+    ]
+  }
+}

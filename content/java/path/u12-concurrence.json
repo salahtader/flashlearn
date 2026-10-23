@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0",
+  "deck": {
+    "id": "java-u12-concurrence",
+    "title": "Concurrence",
+    "description": "Threads, executors, atomicité, deadlock, CompletableFuture",
+    "subject": "Java",
+    "language": "fr",
+    "tags": [
+      "java",
+      "parcours"
+    ],
+    "level": 3,
+    "order": 12,
+    "lesson": "# Concurrence\n\nJS est mono-thread avec une boucle d'événements. Java a de vrais **threads** qui partagent la mémoire : d'où les problèmes de visibilité et d'atomicité.\n\n```java\nExecutorService pool = Executors.newFixedThreadPool(4);\nFuture<Integer> f = pool.submit(() -> calcul());   // Callable\npool.shutdown();\n```\n- `Runnable` ne retourne rien ; `Callable<V>` retourne une valeur et peut lever une exception *checked*.\n- `count++` n'est **pas atomique** : utiliser `AtomicInteger`, `synchronized` ou `LongAdder`.\n- `volatile` garantit la **visibilité**, pas l'atomicité ; `synchronized` garantit exclusion mutuelle **et** visibilité.\n- **Deadlock** : exclusion mutuelle + détention/attente + pas de préemption + attente circulaire. Prévention : ordre global des verrous, `tryLock` avec délai.\n- `CompletableFuture` ressemble aux `Promise` : `thenApply` ~ `then`, `thenCompose` ~ `then` qui renvoie une promesse.\n- Java 21 : *virtual threads* avec `Executors.newVirtualThreadPerTaskExecutor()`.",
+    "cards": [
+      {
+        "id": "conc-002",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "`Runnable` vs `Callable` ?",
+        "answer": "`Runnable.run()` ne retourne rien et ne peut pas lever d'exception *checked*. `Callable<V>.call()` retourne une valeur et peut lever une exception *checked* ; on récupère le résultat via un `Future`.",
+        "explanation": "On soumet les deux à un `ExecutorService` plutôt que de créer des `Thread` à la main.",
+        "tags": [
+          "concurrency",
+          "executors"
+        ]
+      },
+      {
+        "id": "conc-003",
+        "type": "basic",
+        "difficulty": "medium",
+        "question": "Comment utiliser correctement un `ExecutorService` ?",
+        "answer": "Créer un pool (`Executors.newFixedThreadPool(n)`, ou `newVirtualThreadPerTaskExecutor()` depuis Java 21 pour les tâches bloquantes), soumettre des tâches, puis toujours l'arrêter avec `shutdown()`.",
+        "explanation": "Sans `shutdown()`, les threads non daemon empêchent la JVM de s'arrêter. Java 19+ : `ExecutorService` implémente `AutoCloseable` (try-with-resources).",
+        "tags": [
+          "concurrency",
+          "executors"
+        ]
+      },
+      {
+        "id": "conc-005",
+        "type": "code",
+        "difficulty": "hard",
+        "question": "Pourquoi cette classe n'est-elle pas thread-safe, et comment la corriger ?",
+        "code": {
+          "language": "java",
+          "source": "class Counter {\n    private int count = 0;\n    void inc() { count++; }\n    int get() { return count; }\n}"
+        },
+        "answer": "`count++` n'est **pas atomique** (lecture, modification, écriture) : des incréments se perdent. Corrections : `AtomicInteger.incrementAndGet()`, une méthode `synchronized`, ou `LongAdder` en forte contention.",
+        "explanation": "`volatile` ne suffit pas : il garantit la visibilité, pas l'atomicité d'une opération composée.",
+        "tags": [
+          "concurrency",
+          "race-condition"
+        ],
+        "hint": "`count++` se décompose en combien d'opérations ?"
+      },
+      {
+        "id": "conc-001",
+        "type": "basic",
+        "difficulty": "hard",
+        "question": "`volatile` vs `synchronized` ?",
+        "answer": "`volatile` garantit la **visibilité** (et l'ordre) des écritures entre threads, sans exclusion mutuelle ni atomicité des opérations composées (`i++`). `synchronized` garantit exclusion mutuelle **et** visibilité.",
+        "tags": [
+          "concurrency",
+          "memory-model"
+        ],
+        "hint": "Lequel des deux garantit aussi l'exclusion mutuelle ?"
+      },
+      {
+        "id": "conc-004",
+        "type": "basic",
+        "difficulty": "hard",
+        "question": "Quelles sont les conditions d'un *deadlock* et comment l'éviter ?",
+        "answer": "Quatre conditions réunies : **exclusion mutuelle**, **détention et attente**, **pas de préemption**, **attente circulaire**. Prévention : ordre global d'acquisition des verrous, `tryLock` avec délai, réduire la portée des verrous.",
+        "tags": [
+          "concurrency",
+          "deadlock"
+        ]
+      },
+      {
+        "id": "conc-006",
+        "type": "basic",
+        "difficulty": "hard",
+        "question": "`CompletableFuture` : à quoi servent `thenApply`, `thenCompose`, `thenCombine` et `exceptionally` ?",
+        "answer": "`thenApply` : transforme le résultat. `thenCompose` : enchaîne une autre tâche asynchrone (aplatit). `thenCombine` : combine deux futures indépendants. `exceptionally` : gère l'erreur et fournit une valeur de repli.",
+        "explanation": "Analogue de `map` / `flatMap` pour `thenApply` / `thenCompose`. `supplyAsync` utilise le `ForkJoinPool.commonPool()` par défaut : fournir son propre `Executor` pour les I/O bloquantes.",
+        "tags": [
+          "concurrency",
+          "CompletableFuture"
+        ]
+      }
+    ]
+  }
+}

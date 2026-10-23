@@ -12,6 +12,16 @@ export default function Dashboard() {
       {s.backupOverdue && (
         <div className="banner">Pas de sauvegarde depuis plus de 14 jours. <Link to="/settings">Exporter mes données</Link></div>
       )}
+      {s.current && (
+        <div className="card-box path-now">
+          <div className="muted">Ton parcours · {s.unitsDone}/{s.unitsTotal} unités validées</div>
+          <strong>Unité {s.current.order} · {s.current.title}</strong>
+          <div className="muted">{s.current.status === 'lesson' ? 'Commence par la leçon' : `${s.current.seen}/${s.current.total} cartes vues`}</div>
+          <Link className="btn primary big" to={s.current.status === 'lesson' ? `/lesson/${s.current.id}` : `/review/${s.current.id}`}>
+            {s.current.status === 'lesson' ? 'Lire la leçon' : "Continuer l'unité"}
+          </Link>
+        </div>
+      )}
       <Link to="/review" className={`btn primary big ${available === 0 ? 'disabled' : ''}`}>
         {s.due > 0 ? `Commencer la session (${s.due} à réviser)` : s.fresh > 0 ? 'Apprendre de nouvelles cartes' : 'Rien à réviser pour le moment'}
       </Link>

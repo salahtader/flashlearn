@@ -1,10 +1,11 @@
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 /** Markdown sans HTML brut (react-markdown n'interprète pas le HTML) : un JSON importé ne peut pas injecter de script. */
 export default function Md({ children }: { children: string }) {
   return (
     <div className="md">
-      <ReactMarkdown components={{ a: ({ node: _n, ...p }) => <a {...p} target="_blank" rel="noopener noreferrer" /> }}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ a: ({ node: _n, ...p }) => <a {...p} target="_blank" rel="noopener noreferrer" /> }}>
         {children}
       </ReactMarkdown>
     </div>
