@@ -11,7 +11,7 @@
       "parcours"
     ],
     "level": 3,
-    "order": 10,
+    "order": 11,
     "lesson": "# Génériques\n\nComme en TS, `List<String>` donne de la sûreté de type à la compilation. Mais en Java, les génériques sont **effacés** à l'exécution (*type erasure*) : `List<String>` et `List<Integer>` sont de même classe `List`. D'où : pas de `new T()`, pas de `instanceof List<String>`.\n\n- Les génériques sont **invariants** : `List<String>` n'est pas un `List<Object>`.\n- Jokers : `List<?>` (type inconnu), `List<? extends Number>` (lecture), `List<? super Integer>` (écriture).\n- **PECS** : *Producer Extends, Consumer Super*, comme dans `Collections.copy(List<? super T> dest, List<? extends T> src)`.",
     "cards": [
       {

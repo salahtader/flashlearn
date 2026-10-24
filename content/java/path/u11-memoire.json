@@ -11,7 +11,7 @@
       "parcours"
     ],
     "level": 3,
-    "order": 11,
+    "order": 12,
     "lesson": "# Mémoire, JVM et structures internes\n\n- **JVM** exécute le bytecode ; **JRE** = JVM + bibliothèques ; **JDK** = JRE + outils (`javac`).\n- **Stack** : une pile par thread (variables locales, références). **Heap** : tous les objets, gérée par le *garbage collector*.\n- Un objet est libérable quand il n'est plus **accessible** depuis les *GC roots*. Une « fuite » Java est une référence oubliée : collection statique, *listener* jamais retiré, `ThreadLocal` non nettoyé.\n- `HashMap` : tableau de *buckets* indexés par `hashCode()`. Collisions : liste, puis arbre rouge-noir (à partir de 8 éléments). Redimensionnement à 75 % de remplissage.\n- `StackOverflowError` : récursion trop profonde. `OutOfMemoryError` : heap saturée.",
     "cards": [
       {

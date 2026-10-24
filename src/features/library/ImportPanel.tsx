@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react';
 import type { DeckFile } from '../../domain/schema';
 import { parseDeckFile } from '../../infrastructure/json/parse';
+import { parseCourseMd } from '../../infrastructure/md/parseCourse';
+import template from '../../../docs/course-template.md?raw';
+import { downloadText } from '../../utils/download';
 import { applyImport, previewImport, type DuplicateMode, type ImportPreview } from '../../infrastructure/json/import';
 
 export default function ImportPanel() {
@@ -16,7 +19,8 @@ export default function ImportPanel() {
   async function onPick(f?: File) {
     setDone(''); setErrors([]); setFile(null); setPreview(null);
     if (!f) return;
-    const r = parseDeckFile(await f.text());
+    const text = await f.text();
+    const r = f.name.toLowerCase().endsWith('.md') ? parseCourseMd(text) : parseDeckFile(text);
     if (!r.ok) { setErrors(r.errors); return; }
     setFile(r.data);
     setPreview(await previewImport(r.data));
@@ -32,15 +36,16 @@ export default function ImportPanel() {
 
   return (
     <section className="card-box">
-      <h2>Importer un deck JSON</h2>
-      <input ref={input} type="file" accept=".json,application/json" onChange={(e) => onPick(e.target.files?.[0])} />
+      <h2>Importer un cours (.md) ou un deck (.json)</h2>
+      <input ref={input} type="file" accept=".md,.json,text/markdown,application/json" onChange={(e) => onPick(e.target.files?.[0])} />
+      <button className="link" onClick={() => downloadText(template, 'modele-cours.md', 'text/markdown')}>Télécharger un modèle de cours (.md)</button>
       {done && <p className="ok">{done}</p>}
       {errors.length > 0 && (
         <ul className="errors">{errors.map((e, i) => <li key={i}>{e}</li>)}</ul>
       )}
       {file && preview && (
         <div className="preview">
-          <p><strong>{file.deck.title}</strong> — {file.deck.subject} · {file.deck.cards.length} cartes</p>
+          <p><strong>{file.deck.title}</strong> — {file.deck.subject} · {file.deck.cards.length} cartes · {file.deck.exercises.length} exercices{file.deck.lesson ? ' · avec leçon' : ''}</p>
           <p className="muted">
             {preview.fresh} nouvelles · {preview.changed} modifiées · {preview.same} identiques
             {preview.deckExists && ' · le deck existe déjà'}

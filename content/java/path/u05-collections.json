@@ -36,6 +36,61 @@
         ]
       },
       {
+        "id": "n-add",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Comment ajouter `\"x\"` à une `List<String>` nommée `l` ?",
+        "choices": [
+          "l.add(\"x\")",
+          "l.push(\"x\")",
+          "l.append(\"x\")",
+          "l += \"x\""
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`l.add(\"x\")`.",
+        "explanation": "`push` est le vocabulaire JS (tableaux). En Java, `List` utilise `add`.",
+        "tags": []
+      },
+      {
+        "id": "n-mapget",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Comment lire la valeur associée à la clé `k` dans une `Map` nommée `m` ?",
+        "choices": [
+          "m.get(k)",
+          "m[k]",
+          "m.read(k)",
+          "m.value(k)"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`m.get(k)`.",
+        "explanation": "Java n'a pas de syntaxe à crochets pour les maps.",
+        "tags": []
+      },
+      {
+        "id": "n-mapnull",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Que renvoie `map.get(\"absent\")` si la clé n'existe pas ?",
+        "choices": [
+          "null",
+          "Une exception",
+          "0",
+          "Une chaîne vide"
+        ],
+        "correct": [
+          0
+        ],
+        "answer": "`null`.",
+        "explanation": "Pour une valeur par défaut : `map.getOrDefault(\"absent\", 0)`.",
+        "hint": "Il n'y a pas d'`undefined` en Java.",
+        "tags": []
+      },
+      {
         "id": "f2-020",
         "type": "multiple_choice",
         "difficulty": "medium",
@@ -114,6 +169,25 @@
           "pitfall"
         ],
         "hint": "Que contient `x`, et que doit faire Java pour le convertir en `int` ?"
+      }
+    ],
+    "exercises": [
+      {
+        "id": "e-mots",
+        "difficulty": "medium",
+        "title": "Compter les mots",
+        "prompt": "Compte les occurrences de chaque mot de `texte` dans une `Map` triée (`TreeMap`). L'affichage est déjà écrit : complète le remplissage.",
+        "starter": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        String texte = \"java est simple java est puissant\";\n        Map<String, Integer> comptes = new TreeMap<>();\n        // TODO : remplis comptes\n        for (Map.Entry<String, Integer> e : comptes.entrySet()) {\n            System.out.println(e.getKey() + \"=\" + e.getValue());\n        }\n    }\n}",
+        "solution": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        String texte = \"java est simple java est puissant\";\n        Map<String, Integer> comptes = new TreeMap<>();\n        for (String mot : texte.split(\" \")) {\n            comptes.merge(mot, 1, Integer::sum);\n        }\n        for (Map.Entry<String, Integer> e : comptes.entrySet()) {\n            System.out.println(e.getKey() + \"=\" + e.getValue());\n        }\n    }\n}",
+        "expected": "est=2\njava=2\npuissant=1\nsimple=1",
+        "checks": [
+          "Utilise split pour découper",
+          "Utilise merge ou getOrDefault"
+        ],
+        "hints": [
+          "`texte.split(\" \")` retourne un tableau de mots.",
+          "`comptes.merge(mot, 1, Integer::sum)` incrémente le compteur."
+        ]
       }
     ]
   }

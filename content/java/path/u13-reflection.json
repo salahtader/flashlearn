@@ -11,7 +11,7 @@
       "parcours"
     ],
     "level": 3,
-    "order": 13,
+    "order": 14,
     "lesson": "# Réflexion et sérialisation\n\n- `Class<T>` représente un type à l'exécution : `String.class`, `obj.getClass()`.\n- `getMethods()` : méthodes **publiques** (héritées incluses). `getDeclaredMethods()` : toutes celles **déclarées** par la classe, héritées exclues.\n- Sérialisation Java native : `Serializable`, et `transient` pour exclure un champ.\n- Dans `private void readObject(ObjectInputStream in)`, `in.defaultReadObject()` restaure les champs non statiques et non `transient`.",
     "cards": [
       {

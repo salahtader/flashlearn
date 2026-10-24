@@ -125,6 +125,26 @@
         ],
         "hint": "Une *vue* reflète-t-elle les changements de sa source ?"
       }
+    ],
+    "exercises": [
+      {
+        "id": "e-equals",
+        "difficulty": "hard",
+        "title": "equals et hashCode",
+        "prompt": "Complète la classe `Point` pour que deux points de mêmes coordonnées soient égaux : le `HashSet` ne doit en garder qu'un.",
+        "starter": "import java.util.*;\n\nclass Point {\n    final int x, y;\n    Point(int x, int y) { this.x = x; this.y = y; }\n    // TODO : equals et hashCode\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Set<Point> set = new HashSet<>();\n        set.add(new Point(1, 2));\n        set.add(new Point(1, 2));\n        System.out.println(set.size());\n        System.out.println(new Point(1, 2).equals(new Point(1, 2)));\n    }\n}",
+        "solution": "import java.util.*;\n\nclass Point {\n    final int x, y;\n    Point(int x, int y) { this.x = x; this.y = y; }\n\n    @Override\n    public boolean equals(Object o) {\n        if (this == o) return true;\n        if (!(o instanceof Point p)) return false;\n        return x == p.x && y == p.y;\n    }\n\n    @Override\n    public int hashCode() { return Objects.hash(x, y); }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Set<Point> set = new HashSet<>();\n        set.add(new Point(1, 2));\n        set.add(new Point(1, 2));\n        System.out.println(set.size());\n        System.out.println(new Point(1, 2).equals(new Point(1, 2)));\n    }\n}",
+        "expected": "1\ntrue",
+        "checks": [
+          "equals ET hashCode redéfinis",
+          "hashCode cohérent avec equals"
+        ],
+        "hints": [
+          "Signature : `public boolean equals(Object o)`.",
+          "`Objects.hash(x, y)` calcule un hashCode à partir des champs."
+        ],
+        "explanation": "Contrat : deux objets égaux doivent avoir le même `hashCode()`. Sans `hashCode()`, le `HashSet` ne voit pas les doublons."
+      }
     ]
   }
 }

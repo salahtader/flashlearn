@@ -24,6 +24,11 @@ export function parseDeckFile(text: string): ParseResult {
     if (c.type === 'multiple_choice' && c.correct.some((n) => n >= c.choices.length))
       errors.push(`deck.cards[${i}].correct : index hors de la liste des choix`);
   });
+  const exSeen = new Set<string>();
+  r.data.deck.exercises.forEach((e, i) => {
+    if (exSeen.has(e.id)) errors.push(`deck.exercises[${i}].id : identifiant dupliqué "${e.id}"`);
+    exSeen.add(e.id);
+  });
   return errors.length ? { ok: false, errors } : { ok: true, data: r.data };
 }
 

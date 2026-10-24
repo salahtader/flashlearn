@@ -23,10 +23,12 @@ export default function Lesson() {
     );
   }
 
-  async function start() {
+  async function start(dest: string) {
     if (deck?.lesson) await setProgress(deckId, { lessonReadAt: Date.now() });
-    nav(`/review/${deckId}`);
+    nav(dest);
   }
+  const hasCards = (unit?.total ?? 1) > 0;
+  const hasEx = (unit?.exTotal ?? 0) > 0;
   const read = unit?.lessonRead;
 
   return (
@@ -34,7 +36,9 @@ export default function Lesson() {
       <Link to="/path" className="muted">← Parcours</Link>
       <h1>{unit ? `Unité ${deck.order} · ` : ''}{deck.title}</h1>
       {deck.lesson ? <article className="flash lesson"><Md>{deck.lesson}</Md></article> : <p className="muted">Pas de leçon pour ce deck.</p>}
-      <button className="btn primary big" onClick={start}>{read ? 'Aller aux cartes' : "J'ai compris — commencer les cartes"}</button>
+      {hasCards && <button className="btn primary big" onClick={() => start(`/review/${deckId}`)}>{read ? 'Aller aux cartes' : "J'ai compris — commencer les cartes"}</button>}
+      {hasEx && <button className={`btn big ${hasCards ? '' : 'primary'}`} onClick={() => start(`/exercises/${deckId}`)}>{hasCards ? 'Aller aux exercices' : "J'ai compris — aux exercices"}</button>}
+      {!hasCards && !hasEx && <button className="btn primary big" onClick={() => start('/path')}>J'ai compris</button>}
     </>
   );
 }

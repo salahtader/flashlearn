@@ -127,6 +127,25 @@
         ],
         "hint": "Une méthode `static` dépend du type **déclaré** de la variable."
       }
+    ],
+    "exercises": [
+      {
+        "id": "e-formes",
+        "difficulty": "medium",
+        "title": "Polymorphisme : formes",
+        "prompt": "Implémente `Carre` (côté) et `Cercle` (rayon) qui implémentent `Forme`. Le programme affiche l'aire arrondie à 2 décimales de chacune.",
+        "starter": "interface Forme { double aire(); }\n\n// TODO : classes Carre et Cercle\n\npublic class Main {\n    public static void main(String[] args) {\n        Forme[] formes = { new Carre(2), new Cercle(1) };\n        for (Forme f : formes) {\n            System.out.println(Math.round(f.aire() * 100) / 100.0);\n        }\n    }\n}",
+        "solution": "interface Forme { double aire(); }\n\nclass Carre implements Forme {\n    private final double cote;\n    Carre(double cote) { this.cote = cote; }\n    public double aire() { return cote * cote; }\n}\n\nclass Cercle implements Forme {\n    private final double rayon;\n    Cercle(double rayon) { this.rayon = rayon; }\n    public double aire() { return Math.PI * rayon * rayon; }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Forme[] formes = { new Carre(2), new Cercle(1) };\n        for (Forme f : formes) {\n            System.out.println(Math.round(f.aire() * 100) / 100.0);\n        }\n    }\n}",
+        "expected": "4.0\n3.14",
+        "checks": [
+          "Les deux classes implémentent Forme",
+          "La méthode aire() est publique"
+        ],
+        "hints": [
+          "Les méthodes d'interface sont `public` : n'oublie pas le modificateur dans la classe.",
+          "Constructeur : `Carre(double cote)`."
+        ]
+      }
     ]
   }
 }

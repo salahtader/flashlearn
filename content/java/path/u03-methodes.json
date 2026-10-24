@@ -57,6 +57,60 @@
         ]
       },
       {
+        "id": "n-aioobe",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quelle exception est levée par `t[5]` si `t` contient 3 éléments ?",
+        "choices": [
+          "NullPointerException",
+          "ArrayIndexOutOfBoundsException",
+          "IllegalStateException",
+          "NumberFormatException"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`ArrayIndexOutOfBoundsException`.",
+        "explanation": "Les index valides vont de 0 à `t.length - 1`.",
+        "tags": []
+      },
+      {
+        "id": "n-void",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Que signifie `void` dans la signature d'une méthode ?",
+        "choices": [
+          "Elle retourne null",
+          "Elle ne retourne aucune valeur",
+          "Elle est vide",
+          "Elle n'a pas de paramètres"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "Elle ne retourne aucune valeur.",
+        "explanation": "Une méthode `void` peut quand même avoir des paramètres et effectuer des actions.",
+        "tags": []
+      },
+      {
+        "id": "n-main",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quelle est la signature du point d'entrée classique d'un programme Java ?",
+        "choices": [
+          "public void main()",
+          "public static void main(String[] args)",
+          "static main()",
+          "void start()"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`public static void main(String[] args)`.",
+        "explanation": "`static` : la JVM l'appelle sans créer d'objet. Depuis Java 21, une forme simplifiée est possible en préversion.",
+        "tags": []
+      },
+      {
         "id": "f2-018",
         "type": "multiple_choice",
         "difficulty": "medium",
@@ -114,6 +168,42 @@
           "pass-by-value"
         ],
         "hint": "Java copie toujours la valeur. Pour un tableau, que vaut cette valeur ?"
+      }
+    ],
+    "exercises": [
+      {
+        "id": "e-somme",
+        "difficulty": "easy",
+        "title": "Somme et maximum d'un tableau",
+        "prompt": "Avec `int[] t = {4, 8, 15, 16, 23, 42};`, affiche `Somme = ...` puis `Max = ...`.",
+        "starter": "public class Main {\n    public static void main(String[] args) {\n        int[] t = {4, 8, 15, 16, 23, 42};\n        // TODO\n    }\n}",
+        "solution": "public class Main {\n    public static void main(String[] args) {\n        int[] t = {4, 8, 15, 16, 23, 42};\n        int somme = 0;\n        int max = t[0];\n        for (int v : t) {\n            somme += v;\n            if (v > max) max = v;\n        }\n        System.out.println(\"Somme = \" + somme);\n        System.out.println(\"Max = \" + max);\n    }\n}",
+        "expected": "Somme = 108\nMax = 42",
+        "checks": [
+          "Une seule boucle suffit",
+          "Initialise max avec t[0]"
+        ],
+        "hints": [
+          "Parcours avec `for (int v : t)`.",
+          "Ne démarre pas `max` à 0 si le tableau peut contenir des négatifs."
+        ]
+      },
+      {
+        "id": "e-premier",
+        "difficulty": "medium",
+        "title": "Nombres premiers",
+        "prompt": "Complète la méthode `estPremier` : le programme doit afficher les nombres premiers de 2 à 20, un par ligne.",
+        "starter": "public class Main {\n    static boolean estPremier(int n) {\n        // TODO\n        return false;\n    }\n\n    public static void main(String[] args) {\n        for (int n = 2; n <= 20; n++) {\n            if (estPremier(n)) System.out.println(n);\n        }\n    }\n}",
+        "solution": "public class Main {\n    static boolean estPremier(int n) {\n        if (n < 2) return false;\n        for (int d = 2; d * d <= n; d++) {\n            if (n % d == 0) return false;\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        for (int n = 2; n <= 20; n++) {\n            if (estPremier(n)) System.out.println(n);\n        }\n    }\n}",
+        "expected": "2\n3\n5\n7\n11\n13\n17\n19",
+        "checks": [
+          "Teste les diviseurs jusqu'à la racine de n",
+          "Retourne false dès qu'un diviseur est trouvé"
+        ],
+        "hints": [
+          "Un nombre est premier s'il n'a aucun diviseur entre 2 et √n.",
+          "Boucle `for (int d = 2; d * d <= n; d++)`."
+        ]
       }
     ]
   }

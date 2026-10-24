@@ -15,6 +15,14 @@ Un deck avec `order` fait partie du parcours de sa matière ; `level` (1-3) le r
 Une unité est **validée** quand la leçon est lue et que toutes ses cartes ont été vues une fois : la suivante s'ouvre (déblocage manuel possible).
 Une carte peut avoir un `hint` (bouton « Indice »). Le parcours Java est dans `content/java/path/` (13 unités, 75 cartes).
 
+## Cours en Markdown (leçon + quiz + exercices)
+Un fichier `.md` = une unité. Modèle commenté : `docs/course-template.md` (aussi téléchargeable dans l'app : Cartes → Importer).
+- En-tête `id`, `subject`, `title`, `level`, `order`, puis la leçon en Markdown.
+- Blocs : `@@ card|quiz|exercise id [easy|medium|hard] [titre]` avec des sections `::question`, `::answer`, `::choices` (`- [x]` = bonne réponse), `::starter`, `::solution`, `::expected`, `::checks`, `::hint` (plusieurs indices séparés par `---`).
+- Ajout : déposer le `.md` dans `content/<matière>/path/` (intégré au démarrage) ou l'importer depuis l'app (aperçu et erreurs avec numéro de ligne).
+- Exercices : éditeur Java (CodeMirror), brouillon sauvegardé, indices progressifs, solution masquée, critères à cocher. Le code ne s'exécute pas dans l'app : `javac Main.java && java Main`.
+- Une unité est validée quand la leçon est lue, les cartes vues une fois et les exercices réussis.
+
 ## Ajouter du contenu (sans toucher au code)
 - **Decks fournis** : déposer un `.json` dans `content/<matière>/` (intégré au démarrage, mis à jour si le contenu change).
 - **Import utilisateur** : Bibliothèque → Importer un deck JSON (aperçu, validation avec chemin d'erreur, mode doublons).

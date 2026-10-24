@@ -1,5 +1,7 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
 import Dashboard from '../features/dashboard/Dashboard';
+import Exercise from '../features/exercises/Exercise';
+import Exercises from '../features/exercises/Exercises';
 import Library from '../features/library/Library';
 import Lesson from '../features/path/Lesson';
 import Path from '../features/path/Path';
@@ -12,6 +14,8 @@ export default function App() {
       <main className="main">
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/exercises/:deckId" element={<Exercises />} />
+          <Route path="/exercise/:deckId/:exId" element={<Exercise />} />
           <Route path="/path" element={<Path />} />
           <Route path="/lesson/:deckId" element={<Lesson />} />
           <Route path="/library" element={<Library />} />

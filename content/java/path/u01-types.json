@@ -80,6 +80,60 @@
         ]
       },
       {
+        "id": "n-decl",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Quelle déclaration est valide ?",
+        "choices": [
+          "int x = \"5\";",
+          "String s = 'abc';",
+          "double d = 5;",
+          "boolean b = 1;"
+        ],
+        "correct": [
+          2
+        ],
+        "answer": "`double d = 5;`",
+        "explanation": "Un `int` s'élargit implicitement en `double`. `'abc'` n'est pas valide (les guillemets simples sont réservés aux `char`), et `boolean` n'accepte que `true` ou `false`.",
+        "tags": []
+      },
+      {
+        "id": "n-int",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Combien de bits fait un `int` en Java ?",
+        "choices": [
+          "16",
+          "32",
+          "64",
+          "8"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "32 bits.",
+        "explanation": "Plage : de -2³¹ à 2³¹-1 (environ ±2,1 milliards). `long` : 64 bits.",
+        "tags": []
+      },
+      {
+        "id": "n-cast",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Que vaut `(int) 3.9` ?",
+        "choices": [
+          "4",
+          "3",
+          "3.9",
+          "Erreur de compilation"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "`3`.",
+        "explanation": "Le cast d'un `double` vers `int` **tronque** (il n'arrondit pas). Pour arrondir : `Math.round`.",
+        "tags": []
+      },
+      {
         "id": "f2-004",
         "type": "multiple_choice",
         "difficulty": "medium",
@@ -203,6 +257,43 @@
           "modulo"
         ],
         "hint": "La division entière tronque vers zéro ; le reste prend le signe du dividende."
+      }
+    ],
+    "exercises": [
+      {
+        "id": "e-aire",
+        "difficulty": "easy",
+        "title": "Aire d'un cercle",
+        "prompt": "Déclare `double rayon = 3;`, calcule l'aire du cercle (`Math.PI * rayon²`) et affiche `Aire = ...`.",
+        "starter": "public class Main {\n    public static void main(String[] args) {\n        double rayon = 3;\n        // TODO : calcule l'aire et affiche \"Aire = ...\"\n    }\n}",
+        "solution": "public class Main {\n    public static void main(String[] args) {\n        double rayon = 3;\n        double aire = Math.PI * rayon * rayon;\n        System.out.println(\"Aire = \" + aire);\n    }\n}",
+        "expected": "Aire = 28.274333882308138",
+        "checks": [
+          "Utilise Math.PI",
+          "Le résultat est un double"
+        ],
+        "hints": [
+          "`aire = Math.PI * rayon * rayon`",
+          "Concatène avec `\"Aire = \" + aire`."
+        ],
+        "explanation": "`Math.PI` est une constante `double`. La concaténation `+` convertit le `double` en texte."
+      },
+      {
+        "id": "e-cast",
+        "difficulty": "easy",
+        "title": "Conversions et casts",
+        "prompt": "Convertis `7.9` en `int` (cast), puis multiplie-le par un milliard en `long`. Affiche les deux valeurs, une par ligne.",
+        "starter": "public class Main {\n    public static void main(String[] args) {\n        double d = 7.9;\n        // TODO : int i = ... ; long l = ... ; puis affiche i et l\n    }\n}",
+        "solution": "public class Main {\n    public static void main(String[] args) {\n        double d = 7.9;\n        int i = (int) d;\n        long l = i * 1_000_000_000L;\n        System.out.println(i);\n        System.out.println(l);\n    }\n}",
+        "expected": "7\n7000000000",
+        "checks": [
+          "Le cast tronque (7.9 donne 7)",
+          "Le calcul est fait en long (suffixe L)"
+        ],
+        "hints": [
+          "Un cast s'écrit `(int) d`.",
+          "Sans le suffixe `L`, `i * 1_000_000_000` déborde d'un `int`."
+        ]
       }
     ]
   }

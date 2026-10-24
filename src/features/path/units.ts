@@ -1,7 +1,7 @@
 import { db, type DeckRow, type ProgressRow } from '../../infrastructure/db';
 import { resolveStatuses, type UnitStatus } from './units-logic';
 
-export interface Unit { deck: DeckRow; total: number; seen: number; lessonRead: boolean; status: UnitStatus }
+export interface Unit { deck: DeckRow; total: number; seen: number; exTotal: number; exDone: number; lessonRead: boolean; status: UnitStatus }
 
 /** Unités du parcours (decks avec `order`), groupées par matière puis triées par `order`. */
 export async function loadUnits(): Promise<Unit[]> {
@@ -15,11 +15,13 @@ export async function loadUnits(): Promise<Unit[]> {
       deck,
       total: await db.cards.where('deckId').equals(deck.id).count(),
       seen: await db.states.where('deckId').equals(deck.id).count(),
+      exTotal: deck.exercises?.length ?? 0,
+      exDone: await db.exercises.where('deckId').equals(deck.id).filter((e) => e.done).count(),
       lessonRead: !!prog.get(deck.id)?.lessonReadAt,
       unlocked: !!prog.get(deck.id)?.unlocked,
     })));
-    const statuses = resolveStatuses(rows.map((r) => ({ hasLesson: !!r.deck.lesson, total: r.total, seen: r.seen, lessonRead: r.lessonRead, unlocked: r.unlocked })));
-    rows.forEach((r, i) => out.push({ deck: r.deck, total: r.total, seen: r.seen, lessonRead: r.lessonRead, status: statuses[i] }));
+    const statuses = resolveStatuses(rows.map((r) => ({ hasLesson: !!r.deck.lesson, total: r.total, seen: r.seen, exTotal: r.exTotal, exDone: r.exDone, lessonRead: r.lessonRead, unlocked: r.unlocked })));
+    rows.forEach((r, i) => out.push({ deck: r.deck, total: r.total, seen: r.seen, exTotal: r.exTotal, exDone: r.exDone, lessonRead: r.lessonRead, status: statuses[i] }));
   }
   return out;
 }

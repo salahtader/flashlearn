@@ -114,6 +114,25 @@
           "pattern-matching"
         ]
       }
+    ],
+    "exercises": [
+      {
+        "id": "e-stream",
+        "difficulty": "medium",
+        "title": "Streams",
+        "prompt": "Avec la liste de prénoms, garde ceux de plus de 3 lettres, passe-les en majuscules, trie-les et affiche-les séparés par `, `.",
+        "starter": "import java.util.*;\nimport java.util.stream.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<String> noms = List.of(\"ada\", \"grace\", \"linus\", \"bob\", \"margaret\");\n        // TODO : un seul pipeline de stream\n    }\n}",
+        "solution": "import java.util.*;\nimport java.util.stream.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<String> noms = List.of(\"ada\", \"grace\", \"linus\", \"bob\", \"margaret\");\n        String resultat = noms.stream()\n            .filter(n -> n.length() > 3)\n            .map(String::toUpperCase)\n            .sorted()\n            .collect(Collectors.joining(\", \"));\n        System.out.println(resultat);\n    }\n}",
+        "expected": "GRACE, LINUS, MARGARET",
+        "checks": [
+          "filter, map, sorted, puis une opération terminale",
+          "Pas de boucle for"
+        ],
+        "hints": [
+          "Enchaîne `.filter(...)`, `.map(...)`, `.sorted()`.",
+          "`Collectors.joining(\", \")` assemble le texte."
+        ]
+      }
     ]
   }
 }

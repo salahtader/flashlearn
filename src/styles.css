@@ -57,3 +57,10 @@ kbd { opacity: .7; font-size: .75rem; border: 1px solid currentColor; border-rad
 .md ul, .md ol { padding-left: 1.3em; } .md li { margin: .25em 0; }
 .path-now .btn { margin-bottom: 0; }
 .tabs a { font-size: .9rem; }
+.editor { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 8px 0; }
+.editor .cm-editor { min-height: 180px; }
+.editor .cm-editor.cm-focused { outline: 2px solid var(--primary); }
+.plain { margin: 8px 0 0; white-space: pre-wrap; font: .85rem ui-monospace, Menlo, Consolas, monospace; }
+.ex-item { display: block; color: inherit; text-decoration: none; }
+.check { display: flex; gap: 8px; align-items: flex-start; margin-top: 8px; font-size: .95rem; }
+details summary { cursor: pointer; }

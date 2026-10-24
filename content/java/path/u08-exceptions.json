@@ -81,6 +81,25 @@
         ],
         "hint": "Lequel des deux `return` est exécuté en dernier ?"
       }
+    ],
+    "exercises": [
+      {
+        "id": "e-exc",
+        "difficulty": "medium",
+        "title": "Exception personnalisée",
+        "prompt": "Complète `SoldeInsuffisantException` et `retirer` : si le montant dépasse le solde, lève l'exception avec le message `Solde insuffisant : il manque X`.",
+        "starter": "class SoldeInsuffisantException extends Exception {\n    // TODO : constructeur avec message\n}\n\nclass Compte {\n    double solde = 100;\n\n    void retirer(double montant) throws SoldeInsuffisantException {\n        // TODO\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        try {\n            new Compte().retirer(130);\n        } catch (SoldeInsuffisantException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}",
+        "solution": "class SoldeInsuffisantException extends Exception {\n    SoldeInsuffisantException(String message) { super(message); }\n}\n\nclass Compte {\n    double solde = 100;\n\n    void retirer(double montant) throws SoldeInsuffisantException {\n        if (montant > solde) {\n            throw new SoldeInsuffisantException(\"Solde insuffisant : il manque \" + (montant - solde));\n        }\n        solde -= montant;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        try {\n            new Compte().retirer(130);\n        } catch (SoldeInsuffisantException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}",
+        "expected": "Solde insuffisant : il manque 30.0",
+        "checks": [
+          "L'exception est checked (extends Exception)",
+          "Le message passe par super(message)"
+        ],
+        "hints": [
+          "Le constructeur appelle `super(message)`.",
+          "`throw new SoldeInsuffisantException(...)`."
+        ]
+      }
     ]
   }
 }

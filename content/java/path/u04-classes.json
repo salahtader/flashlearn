@@ -62,6 +62,51 @@
         ]
       },
       {
+        "id": "n-this",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Que représente `this` dans un constructeur ?",
+        "choices": [
+          "La classe parente",
+          "L'objet en cours de construction",
+          "Un nouvel objet",
+          "Le garbage collector"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "L'objet en cours de construction (l'instance courante).",
+        "explanation": "On l'utilise surtout pour lever l'ambiguïté : `this.nom = nom;`.",
+        "tags": []
+      },
+      {
+        "id": "n-encap",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "question": "Pourquoi déclarer un champ `private` avec un accesseur ?",
+        "choices": [
+          "Pour que le compilateur optimise",
+          "Pour contrôler l'accès (encapsulation)",
+          "Pour le rendre static",
+          "C'est obligatoire en Java"
+        ],
+        "correct": [
+          1
+        ],
+        "answer": "Pour contrôler l'accès : c'est l'encapsulation.",
+        "explanation": "On peut valider les valeurs, changer la représentation interne ou rendre le champ en lecture seule.",
+        "tags": []
+      },
+      {
+        "id": "n-new",
+        "type": "basic",
+        "difficulty": "easy",
+        "question": "À quoi sert le mot-clé `new` ?",
+        "answer": "Il alloue un objet sur la **heap**, appelle son constructeur et retourne une référence vers cet objet.",
+        "explanation": "`Compte c = new Compte(100);` : `c` contient la référence, pas l'objet lui-même.",
+        "tags": []
+      },
+      {
         "id": "oop-004",
         "type": "basic",
         "difficulty": "medium",
@@ -141,6 +186,26 @@
           "references"
         ],
         "hint": "`final` s'applique à la variable, pas à l'objet pointé."
+      }
+    ],
+    "exercises": [
+      {
+        "id": "e-rect",
+        "difficulty": "medium",
+        "title": "Classe Rectangle",
+        "prompt": "Écris la classe `Rectangle` : champs privés `largeur` et `hauteur`, constructeur, méthode `aire()` et `toString()` qui retourne `Rectangle[3x4]`.",
+        "starter": "class Rectangle {\n    // TODO : champs privés, constructeur, aire(), toString()\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Rectangle r = new Rectangle(3, 4);\n        System.out.println(r);\n        System.out.println(r.aire());\n    }\n}",
+        "solution": "class Rectangle {\n    private final int largeur;\n    private final int hauteur;\n\n    Rectangle(int largeur, int hauteur) {\n        this.largeur = largeur;\n        this.hauteur = hauteur;\n    }\n\n    int aire() { return largeur * hauteur; }\n\n    @Override\n    public String toString() { return \"Rectangle[\" + largeur + \"x\" + hauteur + \"]\"; }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Rectangle r = new Rectangle(3, 4);\n        System.out.println(r);\n        System.out.println(r.aire());\n    }\n}",
+        "expected": "Rectangle[3x4]\n12",
+        "checks": [
+          "Champs private",
+          "Constructeur avec this",
+          "toString redéfini avec @Override"
+        ],
+        "hints": [
+          "`println(r)` appelle `r.toString()`.",
+          "Dans le constructeur : `this.largeur = largeur;`."
+        ]
       }
     ]
   }

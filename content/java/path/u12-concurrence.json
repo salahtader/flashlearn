@@ -11,7 +11,7 @@
       "parcours"
     ],
     "level": 3,
-    "order": 12,
+    "order": 13,
     "lesson": "# Concurrence\n\nJS est mono-thread avec une boucle d'événements. Java a de vrais **threads** qui partagent la mémoire : d'où les problèmes de visibilité et d'atomicité.\n\n```java\nExecutorService pool = Executors.newFixedThreadPool(4);\nFuture<Integer> f = pool.submit(() -> calcul());   // Callable\npool.shutdown();\n```\n- `Runnable` ne retourne rien ; `Callable<V>` retourne une valeur et peut lever une exception *checked*.\n- `count++` n'est **pas atomique** : utiliser `AtomicInteger`, `synchronized` ou `LongAdder`.\n- `volatile` garantit la **visibilité**, pas l'atomicité ; `synchronized` garantit exclusion mutuelle **et** visibilité.\n- **Deadlock** : exclusion mutuelle + détention/attente + pas de préemption + attente circulaire. Prévention : ordre global des verrous, `tryLock` avec délai.\n- `CompletableFuture` ressemble aux `Promise` : `thenApply` ~ `then`, `thenCompose` ~ `then` qui renvoie une promesse.\n- Java 21 : *virtual threads* avec `Executors.newVirtualThreadPerTaskExecutor()`.",
     "cards": [
       {

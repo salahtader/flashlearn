@@ -5,11 +5,11 @@ import { setSetting } from './settings';
 const KIND = 'flashlearn-backup';
 
 export async function createBackup() {
-  const [decks, cards, states, logs, settings, progress] = await Promise.all([
-    db.decks.toArray(), db.cards.toArray(), db.states.toArray(), db.logs.toArray(), db.settings.toArray(), db.progress.toArray(),
+  const [decks, cards, states, logs, settings, progress, exercises] = await Promise.all([
+    db.decks.toArray(), db.cards.toArray(), db.states.toArray(), db.logs.toArray(), db.settings.toArray(), db.progress.toArray(), db.exercises.toArray(),
   ]);
   await setSetting('lastBackupAt', Date.now());
-  return { kind: KIND, version: 1, exportedAt: new Date().toISOString(), decks, cards, states, logs, settings, progress };
+  return { kind: KIND, version: 1, exportedAt: new Date().toISOString(), decks, cards, states, logs, settings, progress, exercises };
 }
 
 export async function restoreBackup(text: string) {
@@ -26,13 +26,14 @@ export async function restoreBackup(text: string) {
     s.card.due = new Date(s.card.due);
     if (s.card.last_review) s.card.last_review = new Date(s.card.last_review);
   }
-  await db.transaction('rw', [db.decks, db.cards, db.states, db.logs, db.settings, db.progress], async () => {
-    await Promise.all([db.decks.clear(), db.cards.clear(), db.states.clear(), db.logs.clear(), db.settings.clear(), db.progress.clear()]);
+  await db.transaction('rw', [db.decks, db.cards, db.states, db.logs, db.settings, db.progress, db.exercises], async () => {
+    await Promise.all([db.decks.clear(), db.cards.clear(), db.states.clear(), db.logs.clear(), db.settings.clear(), db.progress.clear(), db.exercises.clear()]);
     await db.decks.bulkAdd(j.decks);
     await db.cards.bulkAdd(j.cards);
     await db.states.bulkAdd(j.states);
     await db.logs.bulkAdd(j.logs);
     await db.settings.bulkAdd(j.settings);
     await db.progress.bulkAdd(Array.isArray(j.progress) ? j.progress : []);
+    await db.exercises.bulkAdd(Array.isArray(j.exercises) ? j.exercises : []);
   });
 }

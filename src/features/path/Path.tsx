@@ -46,7 +46,7 @@ function UnitCard({ u }: { u: Unit }) {
       </div>
       {u.deck.description && <div className="muted">{u.deck.description}</div>}
       <div className="bar"><div style={{ width: `${pct}%` }} /></div>
-      <div className="muted">{u.seen}/{u.total} cartes vues</div>
+      <div className="muted">{u.total > 0 && `${u.seen}/${u.total} cartes vues`}{u.total > 0 && u.exTotal > 0 && ' · '}{u.exTotal > 0 && `${u.exDone}/${u.exTotal} exercices réussis`}</div>
       <div className="row">
         {u.status === 'locked' && (
           <button className="btn" onClick={() => confirm("Débloquer sans avoir validé l'unité précédente ?") && setProgress(id, { unlocked: true })}>
@@ -56,7 +56,8 @@ function UnitCard({ u }: { u: Unit }) {
         {u.status === 'lesson' && <Link className="btn primary" to={`/lesson/${id}`}>Lire la leçon</Link>}
         {(u.status === 'learning' || u.status === 'done') && (
           <>
-            <Link className="btn primary" to={`/review/${id}`}>{u.status === 'done' ? 'Réviser' : 'Continuer'} les cartes</Link>
+            {u.total > 0 && <Link className="btn primary" to={`/review/${id}`}>{u.status === 'done' ? 'Réviser' : 'Continuer'} les cartes</Link>}
+            {u.exTotal > 0 && <Link className="btn primary" to={`/exercises/${id}`}>Exercices</Link>}
             <Link className="btn" to={`/lesson/${id}`}>Leçon</Link>
           </>
         )}

@@ -27,6 +27,19 @@ export const CardSchema = z.discriminatedUnion('type', [
   }),
 ]);
 
+export const ExerciseSchema = z.object({
+  id,
+  difficulty: z.enum(['easy', 'medium', 'hard']).default('medium'),
+  title: z.string().trim().min(1, 'champ obligatoire').max(200),
+  prompt: text,
+  starter: z.string().max(10000).default(''),
+  solution: z.string().trim().min(1, 'champ obligatoire').max(10000),
+  explanation: z.string().max(8000).optional(),
+  hints: z.array(z.string().max(2000)).max(5).default([]),
+  checks: z.array(z.string().max(500)).max(15).default([]),
+  expected: z.string().max(4000).optional(),
+});
+
 export const DeckFileSchema = z.object({
   schemaVersion: z.literal('1.0', { message: 'version de schéma non prise en charge (attendu "1.0")' }),
   deck: z.object({
@@ -40,9 +53,11 @@ export const DeckFileSchema = z.object({
     subject: z.string().trim().min(1).max(60),
     language: z.string().max(10).default('fr'),
     tags: z.array(z.string().max(60)).max(30).default([]),
-    cards: z.array(CardSchema).min(1).max(5000),
+    cards: z.array(CardSchema).max(5000).default([]),
+    exercises: z.array(ExerciseSchema).max(100).default([]),
   }),
 });
 
 export type Card = z.infer<typeof CardSchema>;
 export type DeckFile = z.infer<typeof DeckFileSchema>;
+export type Exercise = z.infer<typeof ExerciseSchema>;

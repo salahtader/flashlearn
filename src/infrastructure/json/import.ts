@@ -25,7 +25,7 @@ export async function applyImport(file: DeckFile, mode: DuplicateMode, builtin =
     if (!existing || mode === 'update') {
       await db.decks.put({
         id: deck.id, title: deck.title, description: deck.description, subject: deck.subject,
-        language: deck.language, tags: deck.tags, level: deck.level, order: deck.order, lesson: deck.lesson,
+        language: deck.language, tags: deck.tags, level: deck.level, order: deck.order, lesson: deck.lesson, exercises: deck.exercises,
         enabled: existing?.enabled ?? true, builtin: existing?.builtin ?? builtin,
         importedAt: existing?.importedAt ?? Date.now(),
       });
@@ -49,18 +49,19 @@ export async function exportDeck(deckId: string): Promise<DeckFile> {
   return {
     schemaVersion: '1.0',
     deck: {
-      id: d.id, title: d.title, description: d.description, subject: d.subject, language: d.language, tags: d.tags, level: d.level, order: d.order, lesson: d.lesson,
+      id: d.id, title: d.title, description: d.description, subject: d.subject, language: d.language, tags: d.tags, level: d.level, order: d.order, lesson: d.lesson, exercises: d.exercises ?? [],
       cards: cards.sort((a, b) => (a.pos ?? 0) - (b.pos ?? 0)).map(({ uid: _u, deckId: _d, rev: _r, pos: _p, ...c }) => c),
     },
   };
 }
 
 export async function deleteDeck(deckId: string) {
-  await db.transaction('rw', [db.decks, db.cards, db.states, db.logs, db.progress], async () => {
+  await db.transaction('rw', [db.decks, db.cards, db.states, db.logs, db.progress, db.exercises], async () => {
     await db.cards.where('deckId').equals(deckId).delete();
     await db.states.where('deckId').equals(deckId).delete();
     await db.logs.where('deckId').equals(deckId).delete();
     await db.progress.delete(deckId);
+    await db.exercises.where('deckId').equals(deckId).delete();
     await db.decks.delete(deckId);
   });
 }
