@@ -8,30 +8,94 @@ description: LocalDate, Period, Duration, formatage
 language: fr
 tags: java, time
 ---
-# Dates et heures avec java.time
+# Dates et heures avec `java.time`
 
-En JavaScript, `Date` est mutable et les mois vont de 0 à 11. Depuis Java 8, le package `java.time` règle ces problèmes : classes **immuables** et mois de **1 à 12**.
+> **Objectif** : manipuler dates, heures, durées et fuseaux avec l'API moderne, sans les pièges de `Date`.
 
-| Classe | Représente |
-|---|---|
-| `LocalDate` | une date (sans heure ni fuseau) |
-| `LocalTime` | une heure |
-| `LocalDateTime` | date et heure, sans fuseau |
-| `ZonedDateTime` | date, heure et fuseau |
-| `Instant` | un point précis sur la ligne du temps (UTC) |
-| `Period` | une durée en années/mois/jours |
-| `Duration` | une durée en heures/minutes/secondes |
+## 1. Pourquoi `java.time`
+
+En JavaScript, `Date` est mutable, ses mois vont de 0 à 11 et les fuseaux sont confus. Java avait le même problème avec `java.util.Date` et `Calendar`. Depuis Java 8, le package `java.time` règle tout : classes **immuables**, mois de **1 à 12**, types distincts selon ce qu'on représente.
+
+| Classe | Représente | Exemple |
+|---|---|---|
+| `LocalDate` | une date, sans heure ni fuseau | `2026-10-23` |
+| `LocalTime` | une heure | `14:30` |
+| `LocalDateTime` | date et heure, sans fuseau | `2026-10-23T14:30` |
+| `ZonedDateTime` | date, heure **et** fuseau | `2026-10-23T14:30+02:00[Europe/Paris]` |
+| `Instant` | un point précis sur la ligne du temps (UTC) | un horodatage |
+| `Period` | un écart en années, mois, jours | `P1Y2M3D` |
+| `Duration` | un écart en heures, minutes, secondes | `PT1H30M` |
+
+Règle : `LocalDate` / `LocalDateTime` pour des données métier (anniversaire, rendez-vous), `Instant` pour des événements techniques (logs, horodatages), `ZonedDateTime` pour afficher à un utilisateur dans son fuseau.
+
+## 2. Créer et calculer
 
 ```java
-LocalDate d = LocalDate.of(2026, 10, 23);       // octobre = 10
-LocalDate demain = d.plusDays(1);               // nouvelle instance : d ne change pas
-Period p = Period.between(LocalDate.of(1990, 5, 15), d);
-System.out.println(p.getYears());               // 36
+LocalDate d = LocalDate.of(2026, 10, 23);          // octobre = 10 (et non 9 comme en JS)
+LocalDate d2 = LocalDate.of(2026, Month.OCTOBER, 23);
+LocalDate aujourdhui = LocalDate.now();
+LocalDate demain = d.plusDays(1);                  // nouvelle instance : d ne change pas
+d.getDayOfWeek();                                  // FRIDAY
+d.isBefore(demain);                                // true
 
-DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-System.out.println(d.format(f));                // 23/10/2026
+LocalTime t = LocalTime.of(14, 30);
+LocalDateTime dt = LocalDateTime.of(d, t);
 ```
-Ne manipule plus `java.util.Date` ni `Calendar` dans du code neuf.
+
+Les calculs ajustent au calendrier réel :
+
+```java
+LocalDate.of(2024, 1, 31).plusMonths(1);   // 2024-02-29 : le jour est ramené au dernier jour valide
+```
+
+## 3. `Period`, `Duration` et `ChronoUnit`
+
+```java
+LocalDate naissance = LocalDate.of(1990, 5, 15);
+Period p = Period.between(naissance, d);          // écart de calendrier
+p.getYears();                                     // 36
+
+long jours = ChronoUnit.DAYS.between(naissance, d);   // nombre total de jours
+
+Duration duree = Duration.between(LocalTime.of(9, 0), LocalTime.of(10, 30));
+duree.toMinutes();                                // 90
+```
+
+`Period` mesure un écart de **calendrier** (un mois n'a pas de durée fixe). `Duration` mesure un temps **exact**.
+
+## 4. Formater et analyser
+
+```java
+DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+String texte = d.format(f);                        // "23/10/2026"
+LocalDate lu = LocalDate.parse("23/10/2026", f);   // texte → date
+LocalDate iso = LocalDate.parse("2026-10-23");     // format ISO : pas de formateur nécessaire
+```
+
+Un texte invalide lève `DateTimeParseException`. Dans un motif, `MM` = mois, `mm` = minutes, `yyyy` = année, `HH` = heure sur 24 h.
+
+## 5. Fuseaux horaires
+
+```java
+ZoneId paris = ZoneId.of("Europe/Paris");
+ZonedDateTime rdv = ZonedDateTime.of(LocalDateTime.of(2026, 10, 23, 14, 30), paris);
+ZonedDateTime enCasa = rdv.withZoneSameInstant(ZoneId.of("Africa/Casablanca"));
+Instant instant = rdv.toInstant();                 // le même moment, en UTC
+```
+
+Stocke les moments en `Instant` (ou en UTC) et convertis en fuseau local seulement pour l'affichage.
+
+## Erreurs fréquentes
+- Écrire `LocalDate.of(2026, 9, 1)` en pensant à septembre en JS-style : c'est bien septembre ici (mois 1 à 12).
+- Oublier que `plusDays` renvoie une **nouvelle** instance : `d.plusDays(1);` seul ne change rien.
+- Confondre `MM` (mois) et `mm` (minutes) dans un motif.
+- Utiliser `java.util.Date` ou `Calendar` dans du code neuf.
+
+## À retenir
+- Classes immuables, mois de 1 à 12.
+- `LocalDate` / `LocalDateTime` sans fuseau ; `Instant` pour un moment précis ; `ZonedDateTime` avec fuseau.
+- `Period` pour le calendrier, `Duration` pour le temps exact.
+- `DateTimeFormatter.ofPattern(...)` pour formater et analyser.
 
 @@ quiz t1 easy
 ::question

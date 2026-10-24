@@ -64,3 +64,20 @@ kbd { opacity: .7; font-size: .75rem; border: 1px solid currentColor; border-rad
 .ex-item { display: block; color: inherit; text-decoration: none; }
 .check { display: flex; gap: 8px; align-items: flex-start; margin-top: 8px; font-size: .95rem; }
 details summary { cursor: pointer; }
+/* Rendu des cours */
+.md img { max-width: 100%; height: auto; display: block; margin: 14px auto; border-radius: 10px; }
+.md blockquote { margin: 14px 0; padding: 10px 14px; border-left: 4px solid var(--primary); background: color-mix(in srgb, var(--primary) 8%, transparent); border-radius: 0 10px 10px 0; }
+.md blockquote > :first-child { margin-top: 0; } .md blockquote > :last-child { margin-bottom: 0; }
+.lesson h1 { font-size: 1.45rem; margin: .1em 0 .6em; }
+.lesson h2 { font-size: 1.15rem; margin: 1.7em 0 .5em; padding-bottom: .25em; border-bottom: 1px solid var(--line); }
+.lesson h3 { font-size: 1rem; margin: 1.3em 0 .3em; }
+.lesson { font-size: 1rem; }
+.md pre code.hljs { background: none; padding: 0; border: 0; }
+:root { --hl-kw: #7c3aed; --hl-str: #15803d; --hl-com: #6b7280; --hl-num: #b45309; --hl-type: #0369a1; --hl-fn: #b91c1c; }
+@media (prefers-color-scheme: dark) { :root { --hl-kw: #c4b5fd; --hl-str: #86efac; --hl-com: #94a3b8; --hl-num: #fcd34d; --hl-type: #7dd3fc; --hl-fn: #fca5a5; } }
+.hljs-keyword, .hljs-literal, .hljs-built_in, .hljs-selector-tag { color: var(--hl-kw); }
+.hljs-string, .hljs-regexp, .hljs-addition { color: var(--hl-str); }
+.hljs-comment, .hljs-quote { color: var(--hl-com); font-style: italic; }
+.hljs-number, .hljs-symbol, .hljs-bullet { color: var(--hl-num); }
+.hljs-type, .hljs-class .hljs-title, .hljs-title.class_ { color: var(--hl-type); }
+.hljs-title.function_, .hljs-function .hljs-title, .hljs-meta, .hljs-attr { color: var(--hl-fn); }

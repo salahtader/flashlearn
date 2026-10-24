@@ -45,6 +45,7 @@ export default function Settings() {
         {msg && <p className="ok">{msg}</p>}
         <p className="muted">Dernière sauvegarde : {s.lastBackupAt ? new Date(s.lastBackupAt).toLocaleString('fr-FR') : 'jamais'}</p>
       </section>
+      <p className="muted">FlashLearn v{__APP_VERSION__} · build {__BUILD_DATE__}</p>
     </>
   );
 }

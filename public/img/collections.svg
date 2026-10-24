@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 330" font-family="system-ui,sans-serif">
+<rect width="640" height="330" rx="14" fill="#f8fafc"/>
+<rect x="180" y="15" width="130" height="34" rx="8" fill="#e0e7ff" stroke="#6366f1"/><text x="245.0" y="37.0" text-anchor="middle" font-size="14" fill="#1e293b">Iterable</text>
+<rect x="180" y="70" width="130" height="34" rx="8" fill="#e0e7ff" stroke="#6366f1"/><text x="245.0" y="92.0" text-anchor="middle" font-size="14" fill="#1e293b">Collection</text>
+<path d="M245 49V70M245 104V125" stroke="#64748b"/>
+<rect x="40" y="125" width="110" height="34" rx="8" fill="#dcfce7" stroke="#16a34a"/><text x="95.0" y="147.0" text-anchor="middle" font-size="14" fill="#1e293b">List</text>
+<rect x="190" y="125" width="110" height="34" rx="8" fill="#dcfce7" stroke="#16a34a"/><text x="245.0" y="147.0" text-anchor="middle" font-size="14" fill="#1e293b">Set</text>
+<rect x="340" y="125" width="110" height="34" rx="8" fill="#dcfce7" stroke="#16a34a"/><text x="395.0" y="147.0" text-anchor="middle" font-size="14" fill="#1e293b">Queue</text>
+<path d="M245 104V115M95 115H395M95 115V125M245 115V125M395 115V125" stroke="#64748b" fill="none"/>
+<rect x="10" y="195" width="100" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="60.0" y="216.0" text-anchor="middle" font-size="13" fill="#1e293b">ArrayList</text>
+<rect x="120" y="195" width="100" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="170.0" y="216.0" text-anchor="middle" font-size="13" fill="#1e293b">LinkedList</text>
+<rect x="230" y="195" width="100" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="280.0" y="216.0" text-anchor="middle" font-size="13" fill="#1e293b">HashSet</text>
+<rect x="340" y="195" width="110" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="395.0" y="216.0" text-anchor="middle" font-size="13" fill="#1e293b">LinkedHashSet</text>
+<rect x="230" y="240" width="100" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="280.0" y="261.0" text-anchor="middle" font-size="13" fill="#1e293b">TreeSet</text>
+<path d="M60 159V195M170 159V195M245 159V195M395 159V195M245 211H230" stroke="#64748b"/>
+<rect x="490" y="70" width="130" height="34" rx="8" fill="#fee2e2" stroke="#dc2626"/><text x="555.0" y="92.0" text-anchor="middle" font-size="14" fill="#1e293b">Map</text>
+<rect x="480" y="195" width="70" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="515.0" y="216.0" text-anchor="middle" font-size="12" fill="#1e293b">HashMap</text>
+<rect x="558" y="195" width="76" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="596.0" y="216.0" text-anchor="middle" font-size="12" fill="#1e293b">TreeMap</text>
+<rect x="480" y="240" width="154" height="32" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="557.0" y="261.0" text-anchor="middle" font-size="12" fill="#1e293b">LinkedHashMap</text>
+<path d="M555 104V150M515 150V195M596 150V195M555 150H515M555 150H596" stroke="#64748b" fill="none"/>
+<text x="555" y="300" text-anchor="middle" font-size="12" fill="#475569">Map n'étend PAS Collection</text>
+</svg>

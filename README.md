@@ -15,6 +15,11 @@ Un deck avec `order` fait partie du parcours de sa matière ; `level` (1-3) le r
 Une unité est **validée** quand la leçon est lue et que toutes ses cartes ont été vues une fois : la suivante s'ouvre (déblocage manuel possible).
 Une carte peut avoir un `hint` (bouton « Indice »). Le parcours Java est dans `content/java/path/` (13 unités, 75 cartes).
 
+## Contenu Java (14 unités, 3 niveaux)
+Leçons complètes en `content/java/path/*.md` : 109 cartes (57 QCM) et 17 exercices, tous les exercices compilés et vérifiés avec un JDK 21.
+Images : déposer le fichier dans `public/img/` et écrire `![légende](./img/nom.svg)` dans la leçon (exemples : `stack-heap.svg`, `collections.svg`).
+Le code des leçons et des cartes est coloré (Java, JS, TS, JSON, XML, SQL, bash). La version affichée dans Réglages permet de vérifier le déploiement.
+
 ## Cours en Markdown (leçon + quiz + exercices)
 Un fichier `.md` = une unité. Modèle commenté : `docs/course-template.md` (aussi téléchargeable dans l'app : Cartes → Importer).
 - En-tête `id`, `subject`, `title`, `level`, `order`, puis la leçon en Markdown.

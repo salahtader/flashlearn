@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="system-ui, sans-serif">
+  <rect width="640" height="300" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="130" y="34" font-size="16" font-weight="700" fill="#0f172a" text-anchor="middle">Stack (un par thread)</text>
+  <text x="470" y="34" font-size="16" font-weight="700" fill="#0f172a" text-anchor="middle">Heap (partagée)</text>
+  <rect x="30" y="50" width="200" height="200" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="130" y="76" font-size="13" fill="#1e3a8a" text-anchor="middle">frame de main()</text>
+  <rect x="50" y="90" width="160" height="38" rx="6" fill="#fff" stroke="#2563eb"/>
+  <text x="130" y="114" font-size="14" fill="#0f172a" text-anchor="middle">int age = 30</text>
+  <rect x="50" y="140" width="160" height="38" rx="6" fill="#fff" stroke="#2563eb"/>
+  <text x="130" y="164" font-size="14" fill="#0f172a" text-anchor="middle">Personne p  (référence)</text>
+  <rect x="330" y="90" width="260" height="110" rx="8" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="460" y="116" font-size="14" font-weight="700" fill="#14532d" text-anchor="middle">objet Personne</text>
+  <text x="460" y="144" font-size="13" fill="#0f172a" text-anchor="middle">nom → "Ada"</text>
+  <text x="460" y="168" font-size="13" fill="#0f172a" text-anchor="middle">age = 36</text>
+  <path d="M210 159 C 270 159, 280 145, 326 145" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+  <polygon points="326,145 314,138 314,152" fill="#dc2626"/>
+  <text x="320" y="272" font-size="13" fill="#334155" text-anchor="middle">Les primitifs vivent dans la frame ; les objets sur la heap, atteints par une référence.</text>
+</svg>
